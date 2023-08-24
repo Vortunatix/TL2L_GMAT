@@ -15,6 +15,7 @@ public class Planet : MonoBehaviour {
 
     private float timeScale; // number of operations per update, higher means faster yet less accurate simulation
     private float timeMultiplier; // multiplier for calculating sub one-second steps of the simulation when timescale is below 1
+    private float globalScale; // global scaling factor, globalScale (irl size) = 1 unit within simulation (displayed size) 
 
     public Vector2 position;
     public Vector2 velocity;
@@ -29,10 +30,10 @@ public class Planet : MonoBehaviour {
         NameTag = gameObject.transform.GetChild(2).gameObject.transform.GetChild(0).gameObject;
         position = initialPosition;
         velocity = initialVelocity;
+        globalScale = PlanetSystem.GetComponent<PlanetSystem>().globalScale;
 
         // Setup
-        Sprite.transform.localScale = new Vector3(diameter/100000000, diameter/100000000, diameter/100000000); // set planet sprite scale to size
-        NameTag.transform.localPosition = new Vector3(0, -20-diameter/100000000*30, 0); // move nametag outside the planet to make it readable
+        NameTag.transform.localPosition = new Vector3(0, -20-diameter/globalScale*30, 0); // move nametag outside the planet to make it readable
         NameTag.GetComponent<TMPro.TextMeshProUGUI>().text = gameObject.name;
 
         UpdatePosition();
@@ -41,12 +42,13 @@ public class Planet : MonoBehaviour {
     void Update() {
 
         timeScale = PlanetSystem.GetComponent<PlanetSystem>().timeScale; // update timeScale
+        globalScale = PlanetSystem.GetComponent<PlanetSystem>().globalScale; // update global scale
+        Sprite.transform.localScale = new Vector3(diameter/globalScale, diameter/globalScale, diameter/globalScale); // update planet sprite scale 
 
-        if(0 < timeScale && timeScale < 1) { // if timescale is between 0 and one
-            timeMultiplier = 1 / timeScale;
-            timeScale = 1;
+        if(timeScale < 1 && timeScale > 0) { // when doing sub-second steps
+            timeMultiplier = timeScale; // set time multiplier to decrease the size of the calculated steps
         } else {
-            timeMultiplier = 1;
+            timeMultiplier = 1; // set time multiplier to do nothing
         }
 
         for(int t = 0; t < timeScale; t++) { // repeat calculation until timeScale is hit
@@ -84,7 +86,7 @@ public class Planet : MonoBehaviour {
     }
 
     public void UpdatePosition() {
-        gameObject.transform.localPosition = new Vector3(position.x/100000000, position.y/100000000, 0);
+        gameObject.transform.localPosition = new Vector3(position.x/globalScale, position.y/globalScale, 0);
     }
 
 
