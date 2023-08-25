@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlanetSystem : MonoBehaviour {
 
     //public GameObject CenterOfMassSprite;
+    public GameObject UserInterface;
 
     public Planet[] list; // list of all planet that interact with each other
     public float globalScale; // global scaling factor, globalScale (irl size) = 1 unit within simulation (displayed size) 
@@ -26,7 +27,8 @@ public class PlanetSystem : MonoBehaviour {
 
     void Update() {
 
-        timePassed = timePassed + timeScale;
+        timePassed = timePassed + timeScale; // update time within simulation
+        globalScale = UserInterface.GetComponent<UserInterface>().globalScale; // update global scaling factor
 
         /*centerOfMassPositionX = centerOfMassPositionY = 0;
 
