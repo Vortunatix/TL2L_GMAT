@@ -470,7 +470,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!114 &1162152133
 MonoBehaviour:
@@ -485,6 +485,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlanetSystem: {fileID: 553797377}
+  Camera: {fileID: 1422183442}
   globalScale: 1000000
 --- !u!114 &1162152134
 MonoBehaviour:
