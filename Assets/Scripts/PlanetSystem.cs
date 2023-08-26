@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlanetSystem : MonoBehaviour {
 
     //public GameObject CenterOfMassSprite;
     public GameObject UserInterface;
+    public GameObject TimeScaleSlider;
 
     public Planet[] list; // list of all planet that interact with each other
     public float globalScale; // global scaling factor, globalScale (irl size) = 1 unit within simulation (displayed size) 
@@ -27,6 +29,8 @@ public class PlanetSystem : MonoBehaviour {
 
     void Update() {
 
+        timeScale = TimeScaleSlider.GetComponent<Slider>().value;
+
         timePassed = timePassed + timeScale; // update time within simulation
         globalScale = UserInterface.GetComponent<UserInterface>().globalScale; // update global scaling factor
 
@@ -42,5 +46,9 @@ public class PlanetSystem : MonoBehaviour {
 
         CenterOfMassSprite.transform.localPosition = new Vector3(centerOfMassPositionX/100000000, centerOfMassPositionY/100000000, 0);
         */
+    }
+
+    public void SetTimeStepScale(float scale) {
+        timeScale = scale;
     }
 }
