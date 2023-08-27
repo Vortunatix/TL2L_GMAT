@@ -33,9 +33,7 @@ public class Planet : MonoBehaviour {
         globalScale = PlanetSystem.GetComponent<PlanetSystem>().globalScale;
 
         // Setup
-        NameTag.transform.localPosition = new Vector3(0, -20-diameter/globalScale*30, 0); // move nametag outside the planet to make it readable
         NameTag.GetComponent<TMPro.TextMeshProUGUI>().text = gameObject.name;
-
         UpdatePosition();
     }
 
@@ -44,6 +42,7 @@ public class Planet : MonoBehaviour {
         timeScale = PlanetSystem.GetComponent<PlanetSystem>().timeScale; // update timeScale
         globalScale = PlanetSystem.GetComponent<PlanetSystem>().globalScale; // update global scale
         Sprite.transform.localScale = new Vector3(diameter/globalScale, diameter/globalScale, diameter/globalScale); // update planet sprite scale 
+        NameTag.transform.localPosition = new Vector3(0, -20-diameter/globalScale*30, 0); // move nametag outside the planet to make it readable
 
         if(timeScale < 1 && timeScale > 0) { // when doing sub-second steps
             timeMultiplier = timeScale; // set time multiplier to decrease the size of the calculated steps
