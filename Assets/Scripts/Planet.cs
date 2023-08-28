@@ -5,7 +5,8 @@ using System;
 
 public class Planet : MonoBehaviour {
     
-    private GameObject PlanetSystem, Sprite, NameTag;
+    private GameObject PlanetSystem, Sprite, NameTag, Camera;
+    private float infoTextSize = 0.125f; // scale of name tag
 
     public Vector2 initialPosition; 
     public Vector2 initialVelocity;
@@ -15,8 +16,8 @@ public class Planet : MonoBehaviour {
 
     private float timeScale; // number of operations per update, higher means faster yet less accurate simulation
     private float timeMultiplier; // multiplier for calculating sub one-second steps of the simulation when timescale is below 1
-    private float globalScale; // global scaling factor, globalScale (irl size) = 1 unit within simulation (displayed size) 
-
+    private float globalScale; // global scaling factor for calculating the coordinates determining where to draw the sprites
+    private float cameraScale; // current orthographic scale of the camera
     public Vector2 position;
     public Vector2 velocity;
     public Vector2 acceleration;
@@ -31,18 +32,21 @@ public class Planet : MonoBehaviour {
         position = initialPosition;
         velocity = initialVelocity;
         globalScale = PlanetSystem.GetComponent<PlanetSystem>().globalScale;
+        Camera = PlanetSystem.GetComponent<PlanetSystem>().Camera;
 
         // Setup
-        NameTag.GetComponent<TMPro.TextMeshProUGUI>().text = gameObject.name;
+        NameTag.GetComponent<TMPro.TextMeshProUGUI>().text = gameObject.name; // set name tag
+        Sprite.transform.localScale = new Vector3(diameter/globalScale, diameter/globalScale, diameter/globalScale); // set planet sprite scale 
         UpdatePosition();
     }
 
     void Update() {
 
         timeScale = PlanetSystem.GetComponent<PlanetSystem>().timeScale; // update timeScale
-        globalScale = PlanetSystem.GetComponent<PlanetSystem>().globalScale; // update global scale
-        Sprite.transform.localScale = new Vector3(diameter/globalScale, diameter/globalScale, diameter/globalScale); // update planet sprite scale 
-        NameTag.transform.localPosition = new Vector3(0, -20-diameter/globalScale*30, 0); // move nametag outside the planet to make it readable
+
+        cameraScale = Camera.GetComponent<Camera>().orthographicSize;
+        NameTag.transform.localPosition = new Vector3(0, -20-diameter/globalScale*30*(cameraScale/5), 0); // move nametag outside the planet to make it readable
+        NameTag.transform.localScale = new Vector3(cameraScale * infoTextSize, cameraScale * infoTextSize, cameraScale * infoTextSize); // update nametag size
 
         if(timeScale < 1 && timeScale > 0) { // when doing sub-second steps
             timeMultiplier = timeScale; // set time multiplier to decrease the size of the calculated steps

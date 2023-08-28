@@ -32,7 +32,7 @@ public class PlanetSystem : MonoBehaviour {
         timeScale = TimeScaleSlider.GetComponent<Slider>().value;
 
         timePassed = timePassed + timeScale; // update time within simulation
-        globalScale = Camera.GetComponent<CameraBehaviour>().globalScale; // update global scaling factor
+        //globalScale = Camera.GetComponent<CameraBehaviour>().globalScale; // update global scaling factor
 
         /*centerOfMassPositionX = centerOfMassPositionY = 0;
 
