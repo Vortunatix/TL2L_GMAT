@@ -51,4 +51,30 @@ public class PlanetSystem : MonoBehaviour {
     public void SetTimeStepScale(float scale) {
         timeScale = scale;
     }
+
+    public string GetTimePassedReadable() {
+        double buffer = timePassed;
+        int yearsPassed = 0, daysPassed = 0, hoursPassed = 0, minutesPassed = 0, secondsPassed = 0;
+        while(buffer > 31557600) {
+            buffer = buffer - 31557600;
+            yearsPassed++;
+        }
+        while(buffer > 86400) {
+            buffer = buffer - 86400;
+            daysPassed++;
+        }
+        while(buffer > 3600) {
+            buffer = buffer - 3600;
+            hoursPassed++;
+        }
+        /*while(buffer > 60) {
+            buffer = buffer - 60;
+            minutesPassed++;
+        }
+        while(buffer > 1) {
+            buffer--;
+            secondsPassed++;
+        }*/
+        return hoursPassed.ToString() + " h, " + daysPassed.ToString() + " d, " + yearsPassed.ToString() + " y";
+    }
 }

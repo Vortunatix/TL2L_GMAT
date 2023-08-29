@@ -23,6 +23,9 @@ public class Planet : MonoBehaviour {
     public Vector2 acceleration;
     public double forceX, forceY;
 
+    public Vector2[] positionHistory; // stores positions the planet has visited in the past
+    public float historyCompletness; // defines on a scale from 0 to 1 how many of the calculated points are stored, with 0 meaning none and 1 meaning all points will be stored
+
     void Start() {
 
         //initialize all variables
@@ -92,110 +95,4 @@ public class Planet : MonoBehaviour {
         gameObject.transform.localPosition = new Vector3(position.x/globalScale, position.y/globalScale, 0);
     }
 
-
-    /*private GameObject PlanetSystem;
-    private GameObject Sprite;
-    private GameObject NameTag;
-
-    public Vector2 initialPosition; // in meters
-    public Vector2 initialVelocity; // in m/s
-    public float diameter; // in meters
-    public float mass; // in kilograms
-    public double graviationalAcceleration; // in m/s²
-
-    private int timeScale; //number of calculations per update, higher leads to faster simulation at the cost of accuracy
-
-    public Vector2 position; // absolute position of the planet in space
-    public Vector2 velocity; // absolute velocity of the planet in space
-    public Vector2 force; // gravitational force affecting the planet
-    public Vector2 acceleration; // current acceleration of the planet
-
-    void Start() {
-
-        // initialize all variables
-        PlanetSystem = gameObject.transform.parent.gameObject;
-        NameTag = gameObject.transform.GetChild(2).gameObject.transform.GetChild(0).gameObject;
-        NameTag.GetComponent<TMPro.TextMeshProUGUI>().text = gameObject.name;
-        Sprite = gameObject.transform.GetChild(1).gameObject;
-        SetPosition(initialPosition);
-        UpdatePosition();
-        velocity = initialVelocity;
-
-        Sprite.transform.localScale = new Vector3(diameter/100000000, diameter/100000000, diameter/100000000); // set planet sprite scale to size
-        NameTag.transform.localPosition = new Vector3(0, -20-diameter/100000000*30, 0); // move nametag outside the planet to make it readable
-
-    }
-
-
-    void Update() {
-
-        timeScale = PlanetSystem.GetComponent<PlanetSystem>().timeScale; // update the current timescale
-
-        for(int t = 0; t < timeScale; t++) { // repeat calculations to speed up the simulation
-
-            force = new Vector2(0, 0); // reset the force affecting the planet
-
-            for(int i = 0; i < PlanetSystem.GetComponent<PlanetSystem>().list.Length; i++) { // for every listed planet
-                Planet buffer = PlanetSystem.GetComponent<PlanetSystem>().list[i]; 
-
-                Vector2 deltaposition = new Vector2(buffer.GetPosition().x - GetPosition().x, buffer.GetPosition().y - GetPosition().x);
-
-                /*double deltaposition.x = buffer.Getposition.x() - Getposition.x(); // calculate position difference along X axis
-                double deltaposition.y = buffer.Getposition.y() - Getposition.y(); // calculate position difference along Y axis
-                double deltaPostionSqr = Math.Pow(deltaposition.x, 2) + Math.Pow(deltaposition.y, 2); // calculate total position difference, leave it squared for convenience
-                
-                if(deltaposition.magnitude == 0) {goto skipFurtherCalculations;} // skip further calculations if the bodies are at the same position
-
-                double totalForce = (buffer.mass * mass) / Math.Pow(deltaposition.magnitude, 2) * 6.6743 * Math.Pow(10, -11); // calculate force affecting the planet in this moment
-
-                double scalingFactor = totalForce / deltaposition.magnitude; // calculate the scaling factor to dissasemble totalForce vector into its components
-
-                force.x = (float)(force.x + totalForce * scalingFactor); // force affecting the planet along the X axis
-                force.y = (float)(force.y + totalForce * scalingFactor); // force affecting the planet along the Y axis
-
-                skipFurtherCalculations:;
-            }
-
-            acceleration = force / mass; // calculate acceleration due to force
-
-            velocity = velocity + acceleration; // calculate velocity from current velocity and acceleration along x axis
-
-
-            Move(velocity.x, velocity.y); // update the position of the planet 
-            UpdatePosition(); // enforce update
-
-        }
-
-        
-    }
-
-    /*public void Setposition.x(float newPosition) {
-        position.x = newPosition;
-    }
-    public void Setposition.y(float newPosition) {
-        position.y = newPosition;   
-    }
-    /*public void SetPosition(float newPosition.x, float newPosition.y) {
-        position.x = newposition.x;
-        position.y = newposition.y;
-    }
-    public void SetPosition(Vector2 newPosition) {
-        position = newPosition;
-    }
-
-    public void Move(float amountX, float amountY) {
-        position.x = position.x + amountX;
-        position.y = position.y + amountY;
-    }
-    public void Move(Vector2 amount) {
-        position = position + amount;
-    }
-
-    public void UpdatePosition() {
-        gameObject.transform.localPosition = new Vector3(position.x/100000000, position.y/100000000, 0);
-    }
-
-    public Vector2 GetPosition() {
-        return position;
-    }*/
 }
