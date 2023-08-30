@@ -5,7 +5,7 @@ using System;
 
 public class Planet : MonoBehaviour {
     
-    private GameObject PlanetSystem, Sprite, NameTag, Camera;
+    private GameObject PlanetSystem, Sprite, Shadow, NameTag, Camera;
     private float infoTextSize = 0.125f; // scale of name tag
 
     public Vector2 initialPosition; 
@@ -36,10 +36,11 @@ public class Planet : MonoBehaviour {
         velocity = initialVelocity;
         globalScale = PlanetSystem.GetComponent<PlanetSystem>().globalScale;
         Camera = PlanetSystem.GetComponent<PlanetSystem>().Camera;
+        Shadow = gameObject.transform.GetChild(0).gameObject;
 
         // Setup
         NameTag.GetComponent<TMPro.TextMeshProUGUI>().text = gameObject.name; // set name tag
-        Sprite.transform.localScale = new Vector3(diameter/globalScale, diameter/globalScale, diameter/globalScale); // set planet sprite scale 
+        Sprite.transform.localScale = new Vector3(diameter/globalScale, diameter/globalScale, 1); // set planet sprite scale 
         UpdatePosition();
     }
 
@@ -50,6 +51,7 @@ public class Planet : MonoBehaviour {
         cameraScale = Camera.GetComponent<Camera>().orthographicSize;
         NameTag.transform.localPosition = new Vector3(0, -20-diameter/globalScale*30*(cameraScale/5), 0); // move nametag outside the planet to make it readable
         NameTag.transform.localScale = new Vector3(cameraScale * infoTextSize, cameraScale * infoTextSize, cameraScale * infoTextSize); // update nametag size
+        Shadow.transform.localScale = new Vector3(cameraScale / 5, cameraScale / 5, 1);
 
         if(timeScale < 1 && timeScale > 0) { // when doing sub-second steps
             timeMultiplier = timeScale; // set time multiplier to decrease the size of the calculated steps

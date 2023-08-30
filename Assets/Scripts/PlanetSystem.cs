@@ -16,6 +16,8 @@ public class PlanetSystem : MonoBehaviour {
     public double totalMass; // mass of the entire system
     //public float centerOfMassPositionX, centerOfMassPositionY; // position of the center of mass
 
+    public float maximumVelocity; // velocity limit for automatic time scale control
+    public bool  autoTimeScale; // activate  automatic time scale control for optimised accuracy and speed
 
     void Start() {
         Time.timeScale = 100f; // make simulation go brrrrrr
@@ -32,49 +34,56 @@ public class PlanetSystem : MonoBehaviour {
         timeScale = TimeScaleSlider.GetComponent<Slider>().value;
 
         timePassed = timePassed + timeScale; // update time within simulation
-        //globalScale = Camera.GetComponent<CameraBehaviour>().globalScale; // update global scaling factor
 
-        /*centerOfMassPositionX = centerOfMassPositionY = 0;
 
-        for(int i = 0; i < list.Length; i++) { // calculate the center of mass
-
-            double scalingFactor = list[i].GetComponent<Planet>().mass / totalMass;
-            centerOfMassPositionX = (float)(list[i].GetComponent<Planet>().GetPositionX() * scalingFactor);
-            centerOfMassPositionY = (float)(list[i].GetComponent<Planet>().GetPositionY() * scalingFactor);
-        
-        }
-
-        CenterOfMassSprite.transform.localPosition = new Vector3(centerOfMassPositionX/100000000, centerOfMassPositionY/100000000, 0);
-        */
     }
 
     public void SetTimeStepScale(float scale) {
         timeScale = scale;
     }
 
-    public string GetTimePassedReadable() {
+    public string GetTimePassedReadable() { // returns a string containing the time passed measured in years, days and hours
         double buffer = timePassed;
         int yearsPassed = 0, daysPassed = 0, hoursPassed = 0, minutesPassed = 0, secondsPassed = 0;
-        while(buffer > 31557600) {
+        while(buffer > 31557600) { // count years
             buffer = buffer - 31557600;
             yearsPassed++;
         }
-        while(buffer > 86400) {
+        while(buffer > 86400) { // count days
             buffer = buffer - 86400;
             daysPassed++;
         }
-        while(buffer > 3600) {
+        while(buffer > 3600) { // count hours
             buffer = buffer - 3600;
             hoursPassed++;
         }
-        /*while(buffer > 60) {
+        /*while(buffer > 60) { // count minutes
             buffer = buffer - 60;
             minutesPassed++;
         }
-        while(buffer > 1) {
+        while(buffer > 1) { // count seconds
             buffer--;
             secondsPassed++;
         }*/
         return hoursPassed.ToString() + " h, " + daysPassed.ToString() + " d, " + yearsPassed.ToString() + " y";
     }
+
+    public float GetHighestVelocity() { // returns the velocity of the fastest body in the simulation
+        float buffer = 0;
+        for(int i = 0; i < list.Length; i++) { // go through list of all bodies
+            if(buffer > list[i].GetComponent<Planet>().velocity.magnitude) {
+                buffer = list[i].GetComponent<Planet>().velocity.magnitude;
+            }
+        }
+        return buffer;
+    }
+
+    public void SetAutoTimeScale(bool state) {
+        autoTimeScale = state;
+    }
+
+    public void SetMaximumVelocity(float limit) {
+        maximumVelocity = limit;
+    }
+
 }

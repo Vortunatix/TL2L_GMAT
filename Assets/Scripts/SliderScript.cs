@@ -6,16 +6,7 @@ using TMPro;
 
 public class SliderScript : MonoBehaviour {
 
-    private GameObject InputField;
-    
-
-    void Start() {
-        InputField = gameObject.transform.GetChild(0).gameObject;
-    }
-
-    void Update() {
-
-    }
+    public GameObject InputField;
 
     public void UpdateSlider() { // called when text field value is changed
         gameObject.GetComponent<Slider>().value = float.Parse(InputField.GetComponent<TMP_InputField>().text);
