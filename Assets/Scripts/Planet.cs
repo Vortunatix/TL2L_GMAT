@@ -8,8 +8,6 @@ public class Planet : MonoBehaviour {
     private GameObject PlanetSystem, Sprite, Shadow, NameTag, Camera;
     private float infoTextSize = 0.125f; // scale of name tag
 
-    public Vector2 initialPosition; 
-    public Vector2 initialVelocity;
     public float diameter;
     public float mass;
     public float graviationalAcceleration;
@@ -26,17 +24,18 @@ public class Planet : MonoBehaviour {
     public Vector2[] positionHistory; // stores positions the planet has visited in the past
     public float historyCompletness; // defines on a scale from 0 to 1 how many of the calculated points are stored, with 0 meaning none and 1 meaning all points will be stored
 
+    public float lastAngle; // stores the last angle of the velocity vector
+
     void Start() {
 
         //initialize all variables
         PlanetSystem = gameObject.transform.parent.gameObject;
         Sprite = gameObject.transform.GetChild(1).gameObject;
         NameTag = gameObject.transform.GetChild(2).gameObject.transform.GetChild(0).gameObject;
-        position = initialPosition;
-        velocity = initialVelocity;
         globalScale = PlanetSystem.GetComponent<PlanetSystem>().globalScale;
         Camera = PlanetSystem.GetComponent<PlanetSystem>().Camera;
         Shadow = gameObject.transform.GetChild(0).gameObject;
+        lastAngle = Vector2.Angle(Vector2.right, velocity);
 
         // Setup
         NameTag.GetComponent<TMPro.TextMeshProUGUI>().text = gameObject.name; // set name tag
@@ -47,6 +46,8 @@ public class Planet : MonoBehaviour {
     void Update() {
 
         timeScale = PlanetSystem.GetComponent<PlanetSystem>().timeScale; // update timeScale
+
+        lastAngle = Vector2.Angle(Vector2.right, velocity); // update last angle
 
         cameraScale = Camera.GetComponent<Camera>().orthographicSize;
         NameTag.transform.localPosition = new Vector3(0, -20-diameter/globalScale*30*(cameraScale/5), 0); // move nametag outside the planet to make it readable
@@ -95,6 +96,11 @@ public class Planet : MonoBehaviour {
 
     public void UpdatePosition() {
         gameObject.transform.localPosition = new Vector3(position.x/globalScale, position.y/globalScale, 0);
+    }
+
+    public float GetAngleChange() { // returns the the change of the angle of the velocity vector since the last time update() was executed
+        //return Math.Asin(velocity.x/velocity.y);
+        return lastAngle - Vector2.Angle(Vector2.right, velocity);
     }
 
 }

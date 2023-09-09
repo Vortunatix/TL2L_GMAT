@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class PlanetSystem : MonoBehaviour {
 
@@ -9,7 +10,7 @@ public class PlanetSystem : MonoBehaviour {
     public GameObject Camera;
     public GameObject TimeScaleSlider;
 
-    public Planet[] list; // list of all planet that interact with each other
+    public GameObject[] list; // list of all planet that interact with each other
     public float globalScale; // global scaling factor, globalScale (irl size) = 1 unit within simulation (displayed size) 
     public float timeScale; // calculations that one planet per update repeats, higher results in both faster and less accurate simulation
     public double timePassed; // amount of time passed in the simulation
@@ -35,7 +36,7 @@ public class PlanetSystem : MonoBehaviour {
 
         timePassed = timePassed + timeScale; // update time within simulation
 
-
+        Debug.Log(list[1].GetComponent<Planet>().GetAngleChange());
     }
 
     public void SetTimeStepScale(float scale) {
@@ -44,7 +45,7 @@ public class PlanetSystem : MonoBehaviour {
 
     public string GetTimePassedReadable() { // returns a string containing the time passed measured in years, days and hours
         double buffer = timePassed;
-        int yearsPassed = 0, daysPassed = 0, hoursPassed = 0, minutesPassed = 0, secondsPassed = 0;
+        int yearsPassed = 0, daysPassed = 0, hoursPassed = 0/*, minutesPassed = 0, secondsPassed = 0*/;
         while(buffer > 31557600) { // count years
             buffer = buffer - 31557600;
             yearsPassed++;
@@ -68,22 +69,22 @@ public class PlanetSystem : MonoBehaviour {
         return hoursPassed.ToString() + " h, " + daysPassed.ToString() + " d, " + yearsPassed.ToString() + " y";
     }
 
-    public float GetHighestVelocity() { // returns the velocity of the fastest body in the simulation
-        float buffer = 0;
-        for(int i = 0; i < list.Length; i++) { // go through list of all bodies
-            if(buffer > list[i].GetComponent<Planet>().velocity.magnitude) {
-                buffer = list[i].GetComponent<Planet>().velocity.magnitude;
-            }
-        }
-        return buffer;
-    }
-
     public void SetAutoTimeScale(bool state) {
         autoTimeScale = state;
     }
 
     public void SetMaximumVelocity(float limit) {
         maximumVelocity = limit;
+    }
+
+    public float GetHighestAngleChange() { // returns the highest angle change per update cycle in the system
+        float buffer = 0;
+        for(int i=0; i < list.Length; i++) {
+            if(Math.Abs(list[i].GetComponent<Planet>().GetAngleChange()) > buffer) {
+                buffer = Math.Abs(list[i].GetComponent<Planet>().GetAngleChange());
+            }
+        }
+        return buffer;
     }
 
 }
