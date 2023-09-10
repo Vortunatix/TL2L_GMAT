@@ -5,7 +5,7 @@ using System;
 
 public class Planet : MonoBehaviour {
     
-    private GameObject PlanetSystem, Sprite, Shadow, NameTag, Camera;
+    private GameObject PlanetSystem, Sprite, Shadow, Outline, NameTag, SelectorButton, Camera;
     private float infoTextSize = 0.125f; // scale of name tag
 
     public float diameter;
@@ -21,25 +21,31 @@ public class Planet : MonoBehaviour {
     public Vector2 acceleration;
     public double forceX, forceY;
 
+
     public Vector2[] positionHistory; // stores positions the planet has visited in the past
     public float historyCompletness; // defines on a scale from 0 to 1 how many of the calculated points are stored, with 0 meaning none and 1 meaning all points will be stored
 
-    public float lastAngle; // stores the last angle of the velocity vector
+    public Vector2 lastVelocityVector; // stores the last velocity vector
+
+    public bool selected;
 
     void Start() {
 
         //initialize all variables
         PlanetSystem = gameObject.transform.parent.gameObject;
-        Sprite = gameObject.transform.GetChild(1).gameObject;
-        NameTag = gameObject.transform.GetChild(2).gameObject.transform.GetChild(0).gameObject;
+        Sprite = gameObject.transform.GetChild(2).gameObject;
+        NameTag = gameObject.transform.GetChild(3).gameObject.transform.GetChild(0).gameObject;
+        SelectorButton = gameObject.transform.GetChild(3).gameObject.transform.GetChild(1).gameObject;
         globalScale = PlanetSystem.GetComponent<PlanetSystem>().globalScale;
         Camera = PlanetSystem.GetComponent<PlanetSystem>().Camera;
-        Shadow = gameObject.transform.GetChild(0).gameObject;
-        lastAngle = Vector2.Angle(Vector2.right, velocity);
+        Shadow = gameObject.transform.GetChild(1).gameObject;
+        Outline = gameObject.transform.GetChild(0).gameObject;
+        lastVelocityVector = velocity;
 
         // Setup
         NameTag.GetComponent<TMPro.TextMeshProUGUI>().text = gameObject.name; // set name tag
-        Sprite.transform.localScale = new Vector3(diameter/globalScale, diameter/globalScale, 1); // set planet sprite scale 
+        Sprite.transform.localScale = new Vector3(diameter / globalScale, diameter / globalScale, 1); // set planet sprite scale 
+        SetSelected(false);
         UpdatePosition();
     }
 
@@ -47,12 +53,18 @@ public class Planet : MonoBehaviour {
 
         timeScale = PlanetSystem.GetComponent<PlanetSystem>().timeScale; // update timeScale
 
-        lastAngle = Vector2.Angle(Vector2.right, velocity); // update last angle
+        lastVelocityVector = velocity; // update the last velocity vector
 
         cameraScale = Camera.GetComponent<Camera>().orthographicSize;
         NameTag.transform.localPosition = new Vector3(0, -20-diameter/globalScale*30*(cameraScale/5), 0); // move nametag outside the planet to make it readable
         NameTag.transform.localScale = new Vector3(cameraScale * infoTextSize, cameraScale * infoTextSize, cameraScale * infoTextSize); // update nametag size
-        Shadow.transform.localScale = new Vector3(cameraScale / 5, cameraScale / 5, 1);
+        Shadow.transform.localScale = new Vector3(cameraScale / 5, cameraScale / 5, 1); // update shadow size
+        Outline.transform.localScale = new Vector3(diameter / globalScale + cameraScale * 0.025f, diameter / globalScale + cameraScale * 0.025f, 1); // set outline sprite scale
+        if(cameraScale / 5 > diameter / globalScale) {
+            SelectorButton.transform.localScale = new Vector3(cameraScale / 5, cameraScale / 5, 1);
+        } else {
+            SelectorButton.transform.localScale = new Vector3(diameter / globalScale, diameter / globalScale, 1);
+        }
 
         if(timeScale < 1 && timeScale > 0) { // when doing sub-second steps
             timeMultiplier = timeScale; // set time multiplier to decrease the size of the calculated steps
@@ -99,8 +111,29 @@ public class Planet : MonoBehaviour {
     }
 
     public float GetAngleChange() { // returns the the change of the angle of the velocity vector since the last time update() was executed
-        //return Math.Asin(velocity.x/velocity.y);
-        return lastAngle - Vector2.Angle(Vector2.right, velocity);
+        return Vector2.Angle(lastVelocityVector, velocity);
+    }
+
+    public void SetSelected(bool state) {
+        selected = state;
+        Outline.SetActive(state);
+        if(state == true) {
+            PlanetSystem.GetComponent<PlanetSystem>().SetSelectedPlanet(gameObject);
+        } else {
+            PlanetSystem.GetComponent<PlanetSystem>().DeselectPlanet();
+        }
+    }
+
+    public void ToggleSelectedState() {
+        if(selected) {
+            selected = false;
+            Outline.SetActive(false);
+            PlanetSystem.GetComponent<PlanetSystem>().DeselectPlanet();
+        } else {
+            selected = true;
+            Outline.SetActive(true);
+            PlanetSystem.GetComponent<PlanetSystem>().SetSelectedPlanet(gameObject);
+        }
     }
 
 }

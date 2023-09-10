@@ -10,6 +10,8 @@ public class PlanetSystem : MonoBehaviour {
     public GameObject Camera;
     public GameObject TimeScaleSlider;
 
+    public GameObject SelectedPlanet;
+
     public GameObject[] list; // list of all planet that interact with each other
     public float globalScale; // global scaling factor, globalScale (irl size) = 1 unit within simulation (displayed size) 
     public float timeScale; // calculations that one planet per update repeats, higher results in both faster and less accurate simulation
@@ -28,6 +30,7 @@ public class PlanetSystem : MonoBehaviour {
         for(int i = 0; i < list.Length; i++) { // calculate total mass
             totalMass = totalMass + list[i].GetComponent<Planet>().mass;
         }
+
     }
 
     void Update() {
@@ -36,7 +39,6 @@ public class PlanetSystem : MonoBehaviour {
 
         timePassed = timePassed + timeScale; // update time within simulation
 
-        Debug.Log(list[1].GetComponent<Planet>().GetAngleChange());
     }
 
     public void SetTimeStepScale(float scale) {
@@ -85,6 +87,17 @@ public class PlanetSystem : MonoBehaviour {
             }
         }
         return buffer;
+    }
+
+    public void SetSelectedPlanet(GameObject Selected) {
+        if(SelectedPlanet != null) {
+            SelectedPlanet.GetComponent<Planet>().SetSelected(false);
+        }
+        SelectedPlanet = Selected;
+    }
+
+    public void DeselectPlanet() {
+        SelectedPlanet = null;
     }
 
 }

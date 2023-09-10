@@ -617,6 +617,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Camera: {fileID: 1422183442}
   TimeScaleSlider: {fileID: 2110148484}
+  SelectedPlanet: {fileID: 1646875528}
   list:
   - {fileID: 1646875528}
   - {fileID: 1214631807}
@@ -1509,7 +1510,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3600374044079712723, guid: 43b4ae4e9b00cceb6907c1452b16fb4b, type: 3}
       propertyPath: velocity.y
-      value: 1022
+      value: -1022
       objectReference: {fileID: 0}
     - target: {fileID: 3600374044079712723, guid: 43b4ae4e9b00cceb6907c1452b16fb4b, type: 3}
       propertyPath: initialPositionX
