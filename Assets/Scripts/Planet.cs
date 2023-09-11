@@ -119,8 +119,10 @@ public class Planet : MonoBehaviour {
         Outline.SetActive(state);
         if(state == true) {
             PlanetSystem.GetComponent<PlanetSystem>().SetSelectedPlanet(gameObject);
+            Camera.GetComponent<CameraBehaviour>().TrackObject(gameObject);
         } else {
             PlanetSystem.GetComponent<PlanetSystem>().DeselectPlanet();
+            Camera.GetComponent<CameraBehaviour>().TrackObject(null);
         }
     }
 
@@ -129,10 +131,12 @@ public class Planet : MonoBehaviour {
             selected = false;
             Outline.SetActive(false);
             PlanetSystem.GetComponent<PlanetSystem>().DeselectPlanet();
+            Camera.GetComponent<CameraBehaviour>().TrackObject(null);
         } else {
             selected = true;
             Outline.SetActive(true);
             PlanetSystem.GetComponent<PlanetSystem>().SetSelectedPlanet(gameObject);
+            Camera.GetComponent<CameraBehaviour>().TrackObject(gameObject);
         }
     }
 

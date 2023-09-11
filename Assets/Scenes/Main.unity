@@ -2224,11 +2224,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ba05d546db46ae65bffdd68a8e5eb3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  oldCameraPosition: {x: 0, y: 0, z: 0}
-  cameraVelocity: {x: 0, y: 0, z: 0}
+  targetCameraPosition: {x: 0, y: 0, z: 0}
   dragSensitivity: 269
   dragSensitivity2: 500
-  postDragMovement: 1.4
+  dragLag: 0.5
+  dragLagTracking: 0.1
+  TargetObject: {fileID: 1214631807}
   orthographicScale: 0
   mouseScrollDelta: 0
   scrollIntensity: 1.5

@@ -3,26 +3,45 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraBehaviour : MonoBehaviour {
-
-    public Vector3 oldCameraPosition; // position of camera as of last update
-    public Vector3 cameraVelocity; // speed of the camera movement
+    
+    private Vector3 oldMousePosition; // position of mouse as of last update
+    public Vector3 targetCameraPosition; // position the camera is moving towards
     public float dragSensitivity; // multiplier controlling the sensitivity when dragging, higher value means lower sensitivity
     public float dragSensitivity2; // multiplier controlling the sensitivity when both dragging and holding down left control, higher value means lower sensitivity
-    public float postDragMovement; // multiplier for how much the camera moves when not dragging anymore, higher means less movement
-
+    public float dragLag; // multiplier for how much the camera movement is allowed to lag behind the mouse
+    public float dragLagTracking; // multiplier for how much the camera movement is allowed to lag behind when tracking an object
+    private float currentDragLag; // the current draglag multiplier used
+    public GameObject TargetObject; // object that is being tracked
     
     public float orthographicScale; // scale of the displayed simulation, higher value results in higher scale 
-    private Vector3 oldMousePosition; // position of mouse as of last update
+    
     public float mouseScrollDelta; // how much the mousewheel moved since last update
     public float scrollIntensity; // how sensitive the mousewheel reacts, higher value results in higher sensitivity
 
     void Start() {
-        
+        TrackObject(null);
     }
 
     void Update() {
 
-        //dragging when left-clicking with the mouse
+        if(Input.GetKey(KeyCode.Mouse1)) { // update target position if dragging with mouse
+            if(Input.GetKey(KeyCode.LeftControl)) {
+                targetCameraPosition = targetCameraPosition + new Vector3((oldMousePosition.x - Input.mousePosition.x) * (orthographicScale / dragSensitivity2), (oldMousePosition.y - Input.mousePosition.y) * (orthographicScale / dragSensitivity2), 0);
+            } else {
+                targetCameraPosition = targetCameraPosition + new Vector3((oldMousePosition.x - Input.mousePosition.x) * (orthographicScale / dragSensitivity), (oldMousePosition.y - Input.mousePosition.y) * (orthographicScale / dragSensitivity), 0);
+            }
+            TargetObject = null; // disable target tracking
+        }
+
+        if(TargetObject != null) {
+            targetCameraPosition = TargetObject.transform.localPosition;
+        }
+
+        MoveCamera((targetCameraPosition.x - gameObject.transform.localPosition.x) * currentDragLag, (targetCameraPosition.y - gameObject.transform.localPosition.y) * currentDragLag);
+
+        oldMousePosition = Input.mousePosition;
+
+        /*dragging when left-clicking with the mouse
         if(Input.GetKey(KeyCode.Mouse0)) {
             oldCameraPosition = gameObject.transform.localPosition; // remember old camera position
             if(Input.GetKey(KeyCode.LeftControl)) { // decrease how much the camera moves when dragging and holding left control key
@@ -39,6 +58,7 @@ public class CameraBehaviour : MonoBehaviour {
             }
         }
         oldMousePosition = Input.mousePosition;
+        */
 
         // zooming using the mouse wheel
         mouseScrollDelta = mouseScrollDelta + Input.mouseScrollDelta.y; // increase mouseScrollDelta when scrolling
@@ -61,6 +81,16 @@ public class CameraBehaviour : MonoBehaviour {
 
     public void MoveCamera(float deltaX, float deltaY) { // moves the camera by a given amount
         gameObject.transform.localPosition = new Vector3(gameObject.transform.localPosition.x + deltaX, gameObject.transform.localPosition.y + deltaY, -100);
+    }
+
+    public void TrackObject(GameObject Target) { // sets the given object as target for tracking, adjusts the drag lag accordingly
+        if(Target == null) {
+            TargetObject = null;
+            currentDragLag = dragLag;
+        } else {
+            TargetObject = Target;
+            currentDragLag = dragLagTracking;
+        }
     }
 
 }
