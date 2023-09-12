@@ -5,7 +5,7 @@ using System;
 
 public class Planet : MonoBehaviour {
     
-    private GameObject PlanetSystem, Sprite, Shadow, Outline, NameTag, SelectorButton, Camera;
+    private GameObject PlanetSystem, Sprite, Shadow, Outline, NameTag, SelectorButton, Path, Camera;
     private float infoTextSize = 0.125f; // scale of name tag
 
     public float diameter;
@@ -20,10 +20,6 @@ public class Planet : MonoBehaviour {
     public Vector2 velocity;
     public Vector2 acceleration;
     public double forceX, forceY;
-
-
-    public Vector2[] positionHistory; // stores positions the planet has visited in the past
-    public float historyCompletness; // defines on a scale from 0 to 1 how many of the calculated points are stored, with 0 meaning none and 1 meaning all points will be stored
 
     public Vector2 lastVelocityVector; // stores the last velocity vector
 
@@ -40,6 +36,7 @@ public class Planet : MonoBehaviour {
         Camera = PlanetSystem.GetComponent<PlanetSystem>().Camera;
         Shadow = gameObject.transform.GetChild(1).gameObject;
         Outline = gameObject.transform.GetChild(0).gameObject;
+        Path = gameObject.transform.GetChild(4).gameObject;
         lastVelocityVector = velocity;
 
         // Setup
@@ -101,7 +98,7 @@ public class Planet : MonoBehaviour {
             position = position + velocity * timeMultiplier; // update the position of the planet according to formula s = v * t
 
             UpdatePosition(); // enforce update
-
+            
         }
 
     }

@@ -30,7 +30,9 @@ public class CameraBehaviour : MonoBehaviour {
             } else {
                 targetCameraPosition = targetCameraPosition + new Vector3((oldMousePosition.x - Input.mousePosition.x) * (orthographicScale / dragSensitivity), (oldMousePosition.y - Input.mousePosition.y) * (orthographicScale / dragSensitivity), 0);
             }
-            TargetObject = null; // disable target tracking
+            if(TargetObject != null) { // disable target tracking
+                TrackObject(null);
+            }
         }
 
         if(TargetObject != null) {
@@ -64,7 +66,7 @@ public class CameraBehaviour : MonoBehaviour {
         mouseScrollDelta = mouseScrollDelta + Input.mouseScrollDelta.y; // increase mouseScrollDelta when scrolling
         if(mouseScrollDelta != 0f) { 
             mouseScrollDelta = mouseScrollDelta / scrollIntensity; // decrease mouseScrollDelta slightly
-            if(mouseScrollDelta < 0.00000000001f && mouseScrollDelta > -0.00000000001f) { // set mouseScrollDelta to 0 if the value is too close to 0
+            if(mouseScrollDelta < 0.000001f && mouseScrollDelta > -0.000001f) { // set mouseScrollDelta to 0 if the value is too close to 0
                 mouseScrollDelta = 0;
             }
             orthographicScale = orthographicScale + (-mouseScrollDelta) * orthographicScale / 2; // increase / decrease size of scalingFactor
