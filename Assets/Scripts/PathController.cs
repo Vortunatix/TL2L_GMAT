@@ -17,4 +17,8 @@ public class PathController : MonoBehaviour {
         path.time = pathLength / PlanetSystem.GetComponent<PlanetSystem>().timeScale;
     }
 
+    public void Reset() {
+        path.time = 0;
+    }
+
 }

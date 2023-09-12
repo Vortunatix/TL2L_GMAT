@@ -16,12 +16,14 @@ public class Planet : MonoBehaviour {
     private float timeMultiplier; // multiplier for calculating sub one-second steps of the simulation when timescale is below 1
     private float globalScale; // global scaling factor for calculating the coordinates determining where to draw the sprites
     private float cameraScale; // current orthographic scale of the camera
-    public Vector2 position;
-    public Vector2 velocity;
-    public Vector2 acceleration;
+    public Vector2 initialPosition;
+    public Vector2d position;
+    public Vector2 initialVelocity;
+    public Vector2d velocity;
+    public Vector2d acceleration;
     public double forceX, forceY;
 
-    public Vector2 lastVelocityVector; // stores the last velocity vector
+    public Vector2d lastVelocityVector; // stores the last velocity vector
 
     public bool selected;
 
@@ -38,12 +40,15 @@ public class Planet : MonoBehaviour {
         Outline = gameObject.transform.GetChild(0).gameObject;
         Path = gameObject.transform.GetChild(4).gameObject;
         lastVelocityVector = velocity;
+        position.Set(initialPosition.x, initialPosition.y);
+        velocity.Set(initialVelocity.x, initialVelocity.y);
 
         // Setup
         NameTag.GetComponent<TMPro.TextMeshProUGUI>().text = gameObject.name; // set name tag
         Sprite.transform.localScale = new Vector3(diameter / globalScale, diameter / globalScale, 1); // set planet sprite scale 
         SetSelected(false);
         UpdatePosition();
+        Path.GetComponent<PathController>().Reset();
     }
 
     void Update() {
@@ -77,7 +82,7 @@ public class Planet : MonoBehaviour {
 
                 Planet buffer = PlanetSystem.GetComponent<PlanetSystem>().list[i].GetComponent<Planet>(); // create buffer variable
 
-                Vector3 deltaPosition = new Vector3(buffer.position.x - position.x, buffer.position.y - position.y); // calculate distance of the bodies
+                Vector2d deltaPosition = new Vector2d(buffer.position.x - position.x, buffer.position.y - position.y); // calculate distance of the bodies
 
                 if(deltaPosition.magnitude == 0) {goto skipFurtherCalculations;} // skip if the planets are in the same place (or self)
 
@@ -104,11 +109,11 @@ public class Planet : MonoBehaviour {
     }
 
     public void UpdatePosition() {
-        gameObject.transform.localPosition = new Vector3(position.x/globalScale, position.y/globalScale, 0);
+        gameObject.transform.localPosition = new Vector3((float)(position.x/globalScale), (float)(position.y/globalScale), 0f);
     }
 
     public float GetAngleChange() { // returns the the change of the angle of the velocity vector since the last time update() was executed
-        return Vector2.Angle(lastVelocityVector, velocity);
+        return (float)Vector2d.Angle(lastVelocityVector, velocity);
     }
 
     public void SetSelected(bool state) {
