@@ -13,7 +13,7 @@ public class PlanetSystem : MonoBehaviour {
     public GameObject SelectedPlanet;
 
     public GameObject[] list; // list of all planet that interact with each other
-    public float globalScale; // global scaling factor, globalScale (irl size) = 1 unit within simulation (displayed size) 
+    public long globalScale; // global scaling factor, globalScale (irl size) = 1 unit within simulation (displayed size) 
     public float timeScale; // calculations that one planet per update repeats, higher results in both faster and less accurate simulation
     public double timePassed; // amount of time passed in the simulation
     public double totalMass; // mass of the entire system

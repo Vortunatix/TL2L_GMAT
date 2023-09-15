@@ -76,6 +76,9 @@ public class CameraBehaviour : MonoBehaviour {
             if(orthographicScale < 1) { // set global scale to minimum if value is below 100
                 orthographicScale = 1;
             }
+            if(orthographicScale > 10e+10) {
+                orthographicScale = 10e+10f;
+            }
             gameObject.GetComponent<Camera>().orthographicSize = orthographicScale; // update orthographic scale
         }
         

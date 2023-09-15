@@ -14,7 +14,7 @@ public class Planet : MonoBehaviour {
 
     private float timeScale; // number of operations per update, higher means faster yet less accurate simulation
     private float timeMultiplier; // multiplier for calculating sub one-second steps of the simulation when timescale is below 1
-    private float globalScale; // global scaling factor for calculating the coordinates determining where to draw the sprites
+    private long globalScale; // global scaling factor for calculating the coordinates determining where to draw the sprites
     private float cameraScale; // current orthographic scale of the camera
     public Vector2 initialPosition;
     public Vector2d position;
@@ -48,7 +48,6 @@ public class Planet : MonoBehaviour {
         Sprite.transform.localScale = new Vector3(diameter / globalScale, diameter / globalScale, 1); // set planet sprite scale 
         SetSelected(false);
         UpdatePosition();
-        Path.GetComponent<PathController>().Reset();
     }
 
     void Update() {

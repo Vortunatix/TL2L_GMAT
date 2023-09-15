@@ -7,6 +7,7 @@ public class PathController : MonoBehaviour {
     public TrailRenderer path;
     private GameObject PlanetSystem;
     public float pathLength;
+    public bool enabled;
 
     void Start() {
         path = gameObject.GetComponent<TrailRenderer>();
@@ -14,11 +15,7 @@ public class PathController : MonoBehaviour {
     }
 
     void Update() {
-        path.time = pathLength / PlanetSystem.GetComponent<PlanetSystem>().timeScale;
-    }
-
-    public void Reset() {
-        path.time = 0;
+        path.time = pathLength / PlanetSystem.GetComponent<PlanetSystem>().timeScale; 
     }
 
 }
