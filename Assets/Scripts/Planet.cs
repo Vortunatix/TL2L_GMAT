@@ -21,7 +21,7 @@ public class Planet : MonoBehaviour {
     public Vector2 initialVelocity;
     public Vector2d velocity;
     public Vector2d acceleration;
-    public double forceX, forceY;
+    public Vector2d force;
 
     public Vector2d lastVelocityVector; // stores the last velocity vector
 
@@ -55,7 +55,6 @@ public class Planet : MonoBehaviour {
         lastVelocityVector = velocity; // update the last velocity vector
 
         cameraScale = Camera.GetComponent<Camera>().orthographicSize;
-        NameTag.transform.localPosition = new Vector3(0, -20-diameter/globalScale*30*(cameraScale/5), 0); // move nametag outside the planet to make it readable
         NameTag.transform.localScale = new Vector3(cameraScale * infoTextSize, cameraScale * infoTextSize, cameraScale * infoTextSize); // update nametag size
         Shadow.transform.localScale = new Vector3(cameraScale / 5, cameraScale / 5, 1); // update shadow size
         Outline.transform.localScale = new Vector3(diameter / globalScale + cameraScale * 0.025f, diameter / globalScale + cameraScale * 0.025f, 1); // set outline sprite scale
@@ -66,13 +65,21 @@ public class Planet : MonoBehaviour {
             SelectorButton.transform.localScale = new Vector3(diameter / globalScale, diameter / globalScale, 1);
         }
 
+        if(cameraScale / 5 > diameter / globalScale) { // move nametag outside the planet to make it readable
+            NameTag.transform.localPosition = new Vector3(0, (-diameter * 1.1f) / globalScale - 6f * cameraScale, 0);
+        } else {
+            NameTag.transform.localPosition = new Vector3(0, (-diameter * 1.1f) / globalScale - 420, 0); 
+        }
+
     }
 
     public void CalculateNextPosition(float timeMultiplier) { // calculates the velocity, doesnt actually calculate the new position
-    
-        time = timeMultiplier;
 
-        forceX = forceY = 0; // reset forces
+        lastVelocityVector = velocity; // update the last velocity vector
+    
+        time = timeMultiplier; // copy value from timeMultiplier for use in EnforceNextPosition()
+
+        force = Vector2d.zero; // reset forces
 
             for(int i = 0; i < PlanetSystem.GetComponent<PlanetSystem>().list.Length; i++) { // calculate for every planet in list
 
@@ -84,15 +91,14 @@ public class Planet : MonoBehaviour {
 
                 double totalForce = (buffer.mass * mass) / Math.Pow(deltaPosition.magnitude, 2) * 6.6743 * Math.Pow(10, -11); // calculate force resulting from currently computed relation
 
-                forceX = forceX + totalForce * (deltaPosition.x / deltaPosition.magnitude); // calculate x component of the force vector
-                forceY = forceY + totalForce * (deltaPosition.y / deltaPosition.magnitude); // calculate y component of the force vector
+                force.Set(force.x + totalForce * (deltaPosition.x / deltaPosition.magnitude), force.y + totalForce * (deltaPosition.y / deltaPosition.magnitude)); // calculate force vector
 
                 skipFurtherCalculations:;
 
             }
 
-            acceleration.x = (float)(forceX / mass); // update acceleration affecting the planet along the x axis
-            acceleration.y = (float)(forceY / mass); // update acceleration affecting the planet along the y axis
+            acceleration.x = (float)(force.x / mass); // update acceleration affecting the planet along the x axis
+            acceleration.y = (float)(force.y / mass); // update acceleration affecting the planet along the y axis
 
             velocity = velocity + acceleration * time; // update the velocity of the planet according to formula v = a * t
 
@@ -111,7 +117,7 @@ public class Planet : MonoBehaviour {
     
     }
 
-    public float GetAngleChange() { // returns the the change of the angle of the velocity vector since the last time update() was executed
+    public float GetAngleChange() { // returns the the change of the angle of the velocity vector since the last time it was recalculated
         return (float)Vector2d.Angle(lastVelocityVector, velocity);
     }
 

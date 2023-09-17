@@ -1415,7 +1415,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &921401277
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2366,7 +2366,7 @@ MonoBehaviour:
   dragSensitivity: 269
   dragSensitivity2: 500
   dragLag: 0.5
-  dragLagTracking: 0.1
+  dragLagTracking: 0.25
   TargetObject: {fileID: 1214631807}
   orthographicScale: 0
   mouseScrollDelta: 0
