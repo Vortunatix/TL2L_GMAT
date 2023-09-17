@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Jobs;
 using System;
 
 public class Planet : MonoBehaviour {
@@ -12,8 +13,7 @@ public class Planet : MonoBehaviour {
     public float mass;
     public float graviationalAcceleration;
 
-    private float timeScale; // number of operations per update, higher means faster yet less accurate simulation
-    private float timeMultiplier; // multiplier for calculating sub one-second steps of the simulation when timescale is below 1
+    private float time; // multiplier for size of calcjlated steps
     private long globalScale; // global scaling factor for calculating the coordinates determining where to draw the sprites
     private float cameraScale; // current orthographic scale of the camera
     public Vector2 initialPosition;
@@ -52,8 +52,6 @@ public class Planet : MonoBehaviour {
 
     void Update() {
 
-        timeScale = PlanetSystem.GetComponent<PlanetSystem>().timeScale; // update timeScale
-
         lastVelocityVector = velocity; // update the last velocity vector
 
         cameraScale = Camera.GetComponent<Camera>().orthographicSize;
@@ -61,21 +59,20 @@ public class Planet : MonoBehaviour {
         NameTag.transform.localScale = new Vector3(cameraScale * infoTextSize, cameraScale * infoTextSize, cameraScale * infoTextSize); // update nametag size
         Shadow.transform.localScale = new Vector3(cameraScale / 5, cameraScale / 5, 1); // update shadow size
         Outline.transform.localScale = new Vector3(diameter / globalScale + cameraScale * 0.025f, diameter / globalScale + cameraScale * 0.025f, 1); // set outline sprite scale
-        if(cameraScale / 5 > diameter / globalScale) {
+        
+        if(cameraScale / 5 > diameter / globalScale) { // rescale selector button
             SelectorButton.transform.localScale = new Vector3(cameraScale / 5, cameraScale / 5, 1);
         } else {
             SelectorButton.transform.localScale = new Vector3(diameter / globalScale, diameter / globalScale, 1);
         }
 
-        if(timeScale < 1 && timeScale > 0) { // when doing sub-second steps
-            timeMultiplier = timeScale; // set time multiplier to decrease the size of the calculated steps
-        } else {
-            timeMultiplier = 1; // set time multiplier to do nothing
-        }
+    }
 
-        for(int t = 0; t < timeScale; t++) { // repeat calculation until timeScale is hit
+    public void CalculateNextPosition(float timeMultiplier) { // calculates the velocity, doesnt actually calculate the new position
+    
+        time = timeMultiplier;
 
-            forceX = forceY = 0; // reset forces
+        forceX = forceY = 0; // reset forces
 
             for(int i = 0; i < PlanetSystem.GetComponent<PlanetSystem>().list.Length; i++) { // calculate for every planet in list
 
@@ -97,18 +94,21 @@ public class Planet : MonoBehaviour {
             acceleration.x = (float)(forceX / mass); // update acceleration affecting the planet along the x axis
             acceleration.y = (float)(forceY / mass); // update acceleration affecting the planet along the y axis
 
-            velocity = velocity + acceleration * timeMultiplier; // update the velocity of the planet according to formula v = a * t
-
-            position = position + velocity * timeMultiplier; // update the position of the planet according to formula s = v * t
-
-            UpdatePosition(); // enforce update
-            
-        }
+            velocity = velocity + acceleration * time; // update the velocity of the planet according to formula v = a * t
 
     }
 
-    public void UpdatePosition() {
+    public void EnforceNextPosition() { // calculates the new position
+
+        position = position + velocity * time; // update the position of the planet according to formula s = v * t
+
+    }
+
+
+    public void UpdatePosition() { // move the gameObject to the correct position 
+
         gameObject.transform.localPosition = new Vector3((float)(position.x/globalScale), (float)(position.y/globalScale), 0f);
+    
     }
 
     public float GetAngleChange() { // returns the the change of the angle of the velocity vector since the last time update() was executed

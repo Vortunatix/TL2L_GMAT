@@ -27,9 +27,9 @@ public class PlanetSystem : MonoBehaviour {
         
         //CenterOfMassSprite = gameObject.transform.GetChild(gameObject.transform.childCount-1).gameObject;
 
-        for(int i = 0; i < list.Length; i++) { // calculate total mass
-            totalMass = totalMass + list[i].GetComponent<Planet>().mass;
-        }
+        /*for(int i = 0; i < list.Length; i++) { // calculate total mass
+            tota totalMass + list[i].GetComponent<Planet>().mass;lMass =
+        }*/
 
     }
 
@@ -38,6 +38,23 @@ public class PlanetSystem : MonoBehaviour {
         timeScale = TimeScaleSlider.GetComponent<Slider>().value;
 
         timePassed = timePassed + timeScale; // update time within simulation
+
+
+        for(int t = 0; t < timeScale; t++) {
+
+            for(int i = 0; i < list.Length; i++) { // calculate new positions for each planet
+                list[i].GetComponent<Planet>().CalculateNextPosition(1);
+            }
+
+            for(int i = 0; i < list.Length; i++) { // update positions of each planet
+                list[i].GetComponent<Planet>().EnforceNextPosition();
+            }
+
+        }
+
+        for(int i = 0; i < list.Length; i++) { // update positions of each planet
+                list[i].GetComponent<Planet>().UpdatePosition();
+            }
 
     }
 
