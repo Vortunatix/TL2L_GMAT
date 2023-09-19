@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using TMPro;
 
 public class PlanetSystem : MonoBehaviour {
 
     //public GameObject CenterOfMassSprite;
     public GameObject Camera;
-    public GameObject TimeScaleSlider;
-
+    public GameObject SliderTimeScale, InputFieldAccuracy;
     public GameObject SelectedPlanet;
 
     public GameObject[] list; // list of all planet that interact with each other
@@ -22,28 +22,25 @@ public class PlanetSystem : MonoBehaviour {
     public float maximumVelocity; // velocity limit for automatic time scale control
     public bool  autoTimeScale; // activate  automatic time scale control for optimised accuracy and speed
 
-    void Start() {
-        Time.timeScale = 100f; // make simulation go brrrrrr
-        
-        //CenterOfMassSprite = gameObject.transform.GetChild(gameObject.transform.childCount-1).gameObject;
+    public float accuracy; // size of the calculated steps in seconds
 
-        /*for(int i = 0; i < list.Length; i++) { // calculate total mass
-            tota totalMass + list[i].GetComponent<Planet>().mass;lMass =
-        }*/
+    void Start() {
+
+        Time.timeScale = 100f; // make simulation go brrrrrr
 
     }
 
     void Update() {
 
-        timeScale = TimeScaleSlider.GetComponent<Slider>().value;
+        timeScale = SliderTimeScale.GetComponent<Slider>().value;
 
-        timePassed = timePassed + timeScale; // update time within simulation
+        timePassed = timePassed + timeScale  * accuracy; // update time within simulation
 
 
         for(int t = 0; t < timeScale; t++) {
 
             for(int i = 0; i < list.Length; i++) { // calculate new positions for each planet
-                list[i].GetComponent<Planet>().CalculateNextPosition(1);
+                list[i].GetComponent<Planet>().CalculateNextPosition(accuracy);
             }
 
             for(int i = 0; i < list.Length; i++) { // update positions of each planet
@@ -52,7 +49,7 @@ public class PlanetSystem : MonoBehaviour {
 
         }
 
-        for(int i = 0; i < list.Length; i++) { // update positions of each planet
+        for(int i = 0; i < list.Length; i++) { // update positions of each planet on screen
                 list[i].GetComponent<Planet>().UpdatePosition();
             }
 
@@ -115,6 +112,10 @@ public class PlanetSystem : MonoBehaviour {
 
     public void DeselectPlanet() {
         SelectedPlanet = null;
+    }
+
+    public void UpdateAccuracy() {
+        accuracy = float.Parse(InputFieldAccuracy.GetComponent<TMP_InputField>().text);
     }
 
 }
