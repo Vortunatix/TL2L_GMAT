@@ -9,8 +9,10 @@ public class PlanetSystem : MonoBehaviour {
 
     //public GameObject CenterOfMassSprite;
     public GameObject Camera;
-    public GameObject SliderTimeScale, InputFieldAccuracy;
+    
     public GameObject SelectedPlanet;
+
+    public UIController uiController;
 
     public GameObject[] list; // list of all planet that interact with each other
     public long globalScale; // global scaling factor, globalScale (irl size) = 1 unit within simulation (displayed size) 
@@ -32,10 +34,7 @@ public class PlanetSystem : MonoBehaviour {
 
     void Update() {
 
-        timeScale = SliderTimeScale.GetComponent<Slider>().value;
-
         timePassed = timePassed + timeScale  * accuracy; // update time within simulation
-
 
         for(int t = 0; t < timeScale; t++) {
 
@@ -51,38 +50,14 @@ public class PlanetSystem : MonoBehaviour {
 
         for(int i = 0; i < list.Length; i++) { // update positions of each planet on screen
                 list[i].GetComponent<Planet>().UpdatePosition();
-            }
+        }
+
+        
 
     }
 
     public void SetTimeStepScale(float scale) {
         timeScale = scale;
-    }
-
-    public string GetTimePassedReadable() { // returns a string containing the time passed measured in years, days and hours
-        double buffer = timePassed;
-        int yearsPassed = 0, daysPassed = 0, hoursPassed = 0/*, minutesPassed = 0, secondsPassed = 0*/;
-        while(buffer > 31557600) { // count years
-            buffer = buffer - 31557600;
-            yearsPassed++;
-        }
-        while(buffer > 86400) { // count days
-            buffer = buffer - 86400;
-            daysPassed++;
-        }
-        while(buffer > 3600) { // count hours
-            buffer = buffer - 3600;
-            hoursPassed++;
-        }
-        /*while(buffer > 60) { // count minutes
-            buffer = buffer - 60;
-            minutesPassed++;
-        }
-        while(buffer > 1) { // count seconds
-            buffer--;
-            secondsPassed++;
-        }*/
-        return hoursPassed.ToString() + " h, " + daysPassed.ToString() + " d, " + yearsPassed.ToString() + " y";
     }
 
     public void SetAutoTimeScale(bool state) {
@@ -105,17 +80,15 @@ public class PlanetSystem : MonoBehaviour {
 
     public void SetSelectedPlanet(GameObject Selected) {
         if(SelectedPlanet != null) {
-            SelectedPlanet.GetComponent<Planet>().SetSelected(false);
+            SelectedPlanet.GetComponent<Planet>().SetSelected(false); // deselect old selected planet
         }
-        SelectedPlanet = Selected;
+        SelectedPlanet = Selected; // set new planet as selected
+        uiController.SetSelected(Selected); // update selected planet in UIController
     }
 
     public void DeselectPlanet() {
         SelectedPlanet = null;
-    }
-
-    public void UpdateAccuracy() {
-        accuracy = float.Parse(InputFieldAccuracy.GetComponent<TMP_InputField>().text);
+        uiController.SetSelected(null);
     }
 
 }

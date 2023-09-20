@@ -7,7 +7,6 @@ public class PathController : MonoBehaviour {
     public TrailRenderer path;
     private GameObject PlanetSystem;
     public float pathLength;
-    public bool enabled;
 
     void Start() {
         path = gameObject.GetComponent<TrailRenderer>();

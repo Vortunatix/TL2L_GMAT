@@ -6,18 +6,18 @@ using TMPro;
 
 public class AutomaticTimeScale : MonoBehaviour {
 
-    public GameObject PlanetSystem;
+    /*public GameObject PlanetSystem;
     public GameObject SimulationSpeedSlider;
 
     public GameObject InputField;
 
-    public bool enabled;
+    public bool active;
     void Start() {
         
     }
 
     void Update() {
-        if(enabled) {
+        if(active) {
             if(SimulationSpeedSlider.GetComponent<SimulationSpeedController>().GetSpeed() == 0) {
                 SimulationSpeedSlider.GetComponent<SimulationSpeedController>().SetSpeed(1);
             }
@@ -26,6 +26,6 @@ public class AutomaticTimeScale : MonoBehaviour {
     }
 
     public void ToggleEnable() {
-        enabled = !enabled;
-    }
+        active = !active;
+    }*/
 }
