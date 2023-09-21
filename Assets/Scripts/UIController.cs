@@ -22,8 +22,13 @@ public class UIController : MonoBehaviour {
     // infoscreen references
     public TMP_InputField inputFieldPositionX, inputFieldPositionY;
     public TMP_InputField inputFieldVelocityX, inputFieldVelocityY;
+    public TMP_Text textMagnitudeVelocity;
     public TMP_InputField inputFieldAccelerationX, inputFieldAccelerationY;
+    public TMP_Text textMagnitudeAcceleration;
     public TMP_InputField inputFieldForceX, inputFieldForceY;
+    public TMP_Text textMagnitudeForce;
+
+
 
     void Start() {
 
@@ -40,11 +45,18 @@ public class UIController : MonoBehaviour {
         if(selected != null) { // update values in infoscreen
             
             Planet buffer = selected.GetComponent<Planet>();
+
+            // update input fields
             inputFieldPositionX.text = ((float)buffer.position.x).ToString(); inputFieldPositionY.text = ((float)buffer.position.y).ToString();
             inputFieldVelocityX.text = ((float)buffer.velocity.x).ToString(); inputFieldVelocityY.text = ((float)buffer.velocity.y).ToString();
             inputFieldAccelerationX.text = ((float)buffer.acceleration.x).ToString(); inputFieldAccelerationY.text = ((float)buffer.acceleration.y).ToString();
             inputFieldForceX.text = ((float)buffer.force.x).ToString(); inputFieldForceY.text = ((float)buffer.force.y).ToString();
         
+            // update text fields
+            textMagnitudeVelocity.text = ((float)buffer.velocity.magnitude).ToString() + " m/s";
+            textMagnitudeAcceleration.text = ((float)buffer.acceleration.magnitude).ToString() + " m/s²";
+            textMagnitudeForce.text = ((float)buffer.force.magnitude).ToString() + " N";
+
         }
 
     }
@@ -61,6 +73,10 @@ public class UIController : MonoBehaviour {
             inputFieldVelocityX.text = ""; inputFieldVelocityY.text = "";
             inputFieldAccelerationX.text = ""; inputFieldAccelerationY.text = "";
             inputFieldForceX.text = ""; inputFieldForceY.text = "";
+
+            textMagnitudeVelocity.text = "";
+            textMagnitudeAcceleration.text = "";
+            textMagnitudeForce.text = "";
         
         }
     }

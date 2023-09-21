@@ -31,12 +31,12 @@ public class GridController : MonoBehaviour {
 
     void Update () {
 
-        leftEdge = MainCamera.transform.localPosition.x - (Cam.orthographicSize * 2);
-        rightEdge = MainCamera.transform.localPosition.x + (Cam.orthographicSize * 2);
-        topEdge = MainCamera.transform.localPosition.y + Cam.orthographicSize;
-        bottomEdge = MainCamera.transform.localPosition.y - Cam.orthographicSize;
-        cameraWidth = rightEdge - leftEdge;
-        cameraHeight = topEdge - bottomEdge;
+        leftEdge = MainCamera.transform.localPosition.x - Screen.width / 2;
+        rightEdge = MainCamera.transform.localPosition.x + Screen.width / 2;
+        topEdge = MainCamera.transform.localPosition.y + Screen.height / 2;
+        bottomEdge = MainCamera.transform.localPosition.y - Screen.height / 2;
+        cameraWidth = Screen.width;
+        cameraHeight = Screen.height;
 
         // draw vertical Lines
         int pos = (int)Math.Floor(leftEdge);
