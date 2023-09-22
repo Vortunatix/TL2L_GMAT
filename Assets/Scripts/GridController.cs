@@ -7,7 +7,7 @@ public class GridController : MonoBehaviour {
 
     public GameObject MainCamera, PlanetSystem;
 
-    public float leftEdge, rightEdge, topEdge, bottomEdge, cameraWidth, cameraHeight;
+    public float leftEdge, rightEdge, topEdge, bottomEdge;
 
     public GameObject[] gridLines; // array where all lines are stored
 
@@ -21,6 +21,8 @@ public class GridController : MonoBehaviour {
     private Camera Cam;
     private long globalScale;
 
+    public float screenSize;
+
     void Start() {
 
         gridLines = new GameObject[64]; // set array size to 64 , there will probably never be more than 60 children but 64 is a nice number
@@ -31,12 +33,10 @@ public class GridController : MonoBehaviour {
 
     void Update () {
 
-        leftEdge = MainCamera.transform.localPosition.x - Screen.width / 2;
-        rightEdge = MainCamera.transform.localPosition.x + Screen.width / 2;
-        topEdge = MainCamera.transform.localPosition.y + Screen.height / 2;
-        bottomEdge = MainCamera.transform.localPosition.y - Screen.height / 2;
-        cameraWidth = Screen.width;
-        cameraHeight = Screen.height;
+        leftEdge = Cam.ScreenToWorldPoint(new Vector3(0, 0, 0)).x;
+        rightEdge = Cam.ScreenToWorldPoint(new Vector3(Cam.pixelWidth, 0, 0)).x;
+        topEdge = Cam.ScreenToWorldPoint(new Vector3(0, Cam.pixelHeight, 0)).y;
+        bottomEdge = Cam.ScreenToWorldPoint(new Vector3(0, 0, 0)).y;
 
         // draw vertical Lines
         int pos = (int)Math.Floor(leftEdge);
