@@ -15,19 +15,31 @@ public class GridController : MonoBehaviour {
 
     public float lineWidthModifier; // modifier for the line width of the grid lines
     public float textPositionModifier;
-    public float textBorderDistanceY; // distance of the text from the bottom screen border
-    public float textBorderDistanceX; // distance of the text from the left screen border
+    public float bottomTextOffsetX, bottomTextOffsetY; // offset of the text from the bottom screen border
+    private float newBottomTextOffsetX;
+    public float leftTextOffsetX, leftTextOffsetY; // offset of the text from the left screen border
+    private float newLeftTextOffsetX;
 
     private Camera Cam;
     private long globalScale;
 
     public float screenSize;
 
+    public float screenRatio;
+
     void Start() {
 
         gridLines = new GameObject[64]; // set array size to 64 , there will probably never be more than 60 children but 64 is a nice number
         Cam = MainCamera.GetComponent<Camera>();
         globalScale = PlanetSystem.GetComponent<PlanetSystem>().globalScale;
+
+        screenRatio = (float)Cam.pixelWidth / (float)Cam.pixelHeight;
+        
+        // adjust offset value for current screen resolution
+        newBottomTextOffsetX = bottomTextOffsetX * (screenRatio / 1.777f); 
+        newLeftTextOffsetX = leftTextOffsetX * (screenRatio / 1.777f);
+
+
 
     }
 
@@ -53,7 +65,7 @@ public class GridController : MonoBehaviour {
                 current.SetPosition(2, new Vector3(pos, bottomEdge, 10));
                 current.SetPosition(3, new Vector3(pos, bottomEdge - Cam.orthographicSize / 2, 10));
                 current.SetWidth((float)Math.Pow(10, DigitAmount(Cam.orthographicSize)) * lineWidthModifier, (float)Math.Pow(10, DigitAmount(Cam.orthographicSize)) * lineWidthModifier);
-                gridLines[i].transform.localPosition = new Vector3((pos - MainCamera.transform.localPosition.x) / Cam.orthographicSize * textPositionModifier, (bottomEdge - MainCamera.transform.localPosition.y) / Cam.orthographicSize * textPositionModifier + textBorderDistanceY, 0);
+                gridLines[i].transform.localPosition = Cam.WorldToScreenPoint(new Vector3(pos - Cam.orthographicSize * newBottomTextOffsetX, bottomEdge - Cam.orthographicSize * bottomTextOffsetY, 0));
                 gridLines[i].transform.GetChild(0).gameObject.transform.GetChild(0).transform.gameObject.GetComponent<TMPro.TextMeshProUGUI>().text = (pos * (float)globalScale).ToString();
                 i++;
             }
@@ -73,7 +85,7 @@ public class GridController : MonoBehaviour {
                 current.SetPosition(2, new Vector3(leftEdge, pos, 10));
                 current.SetPosition(3, new Vector3(leftEdge - Cam.orthographicSize / 2, pos, 10));
                 current.SetWidth((float)Math.Pow(10, DigitAmount(Cam.orthographicSize)) * lineWidthModifier, (float)Math.Pow(10, DigitAmount(Cam.orthographicSize)) * lineWidthModifier);
-                gridLines[i].transform.localPosition = new Vector3((leftEdge - MainCamera.transform.localPosition.x) / Cam.orthographicSize * textPositionModifier + textBorderDistanceX, (pos - MainCamera.transform.localPosition.y) / Cam.orthographicSize * textPositionModifier, 0);
+                gridLines[i].transform.localPosition = Cam.WorldToScreenPoint(new Vector3(leftEdge - Cam.orthographicSize * newLeftTextOffsetX, pos - Cam.orthographicSize * leftTextOffsetY, 0));
                 gridLines[i].transform.GetChild(0).gameObject.transform.GetChild(0).transform.gameObject.GetComponent<TMPro.TextMeshProUGUI>().text = (pos * (float)globalScale).ToString();
                 i++;
             }

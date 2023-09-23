@@ -901,14 +901,16 @@ MonoBehaviour:
   rightEdge: 0
   topEdge: 0
   bottomEdge: 0
-  cameraWidth: 0
-  cameraHeight: 0
   gridLines: []
   gridLine: {fileID: 1679487610819665355, guid: 98400ff149edd5ba49559dd255448398, type: 3}
   lineWidthModifier: 0.01
   textPositionModifier: 300
-  textBorderDistanceY: 10
-  textBorderDistanceX: 30
+  bottomTextOffsetX: 1.78
+  bottomTextOffsetY: 0.95
+  leftTextOffsetX: 1.65
+  leftTextOffsetY: 1
+  screenSize: 0
+  screenRatio: 0
 --- !u!1 &359676957
 GameObject:
   m_ObjectHideFlags: 0
@@ -8596,15 +8598,15 @@ RectTransform:
   m_GameObject: {fileID: 1679768230}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 300, y: 800, z: 1}
+  m_LocalScale: {x: 300, y: 100000, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2013899442}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 404, y: -0.365}
-  m_SizeDelta: {x: 1, y: 0.73}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: 354, y: 19.18}
+  m_SizeDelta: {x: 1, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!212 &1679768232
 SpriteRenderer:
@@ -9274,9 +9276,9 @@ RectTransform:
   - {fileID: 2066756102}
   m_Father: {fileID: 1162152137}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 60, y: 0}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: -563, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2049088630
