@@ -2645,9 +2645,9 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 553797378}
-        m_TargetAssemblyTypeName: PlanetSystem, Assembly-CSharp
-        m_MethodName: UpdateAccuracy
+      - m_Target: {fileID: 1162152138}
+        m_TargetAssemblyTypeName: UIController, Assembly-CSharp
+        m_MethodName: InputFieldVelocityYUpdate
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3097,9 +3097,9 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 553797378}
-        m_TargetAssemblyTypeName: PlanetSystem, Assembly-CSharp
-        m_MethodName: UpdateAccuracy
+      - m_Target: {fileID: 1162152138}
+        m_TargetAssemblyTypeName: UIController, Assembly-CSharp
+        m_MethodName: InputFieldPositionYUpdate
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3931,9 +3931,9 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 553797378}
-        m_TargetAssemblyTypeName: PlanetSystem, Assembly-CSharp
-        m_MethodName: UpdateAccuracy
+      - m_Target: {fileID: 1162152138}
+        m_TargetAssemblyTypeName: UIController, Assembly-CSharp
+        m_MethodName: InputFieldAccelerationXUpdate
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4747,9 +4747,9 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 553797378}
-        m_TargetAssemblyTypeName: PlanetSystem, Assembly-CSharp
-        m_MethodName: UpdateAccuracy
+      - m_Target: {fileID: 1162152138}
+        m_TargetAssemblyTypeName: UIController, Assembly-CSharp
+        m_MethodName: InputFieldForceYUpdate
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5394,9 +5394,9 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 553797378}
-        m_TargetAssemblyTypeName: PlanetSystem, Assembly-CSharp
-        m_MethodName: UpdateAccuracy
+      - m_Target: {fileID: 1162152138}
+        m_TargetAssemblyTypeName: UIController, Assembly-CSharp
+        m_MethodName: InputFieldPositionXUpdate
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5561,9 +5561,9 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 553797378}
-        m_TargetAssemblyTypeName: PlanetSystem, Assembly-CSharp
-        m_MethodName: UpdateAccuracy
+      - m_Target: {fileID: 1162152138}
+        m_TargetAssemblyTypeName: UIController, Assembly-CSharp
+        m_MethodName: InputFieldAccelerationYUpdate
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6328,9 +6328,9 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 553797378}
-        m_TargetAssemblyTypeName: PlanetSystem, Assembly-CSharp
-        m_MethodName: UpdateAccuracy
+      - m_Target: {fileID: 1162152138}
+        m_TargetAssemblyTypeName: UIController, Assembly-CSharp
+        m_MethodName: InputFieldVelocityXUpdate
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8504,9 +8504,9 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 553797378}
-        m_TargetAssemblyTypeName: PlanetSystem, Assembly-CSharp
-        m_MethodName: UpdateAccuracy
+      - m_Target: {fileID: 1162152138}
+        m_TargetAssemblyTypeName: UIController, Assembly-CSharp
+        m_MethodName: InputFieldForceXUpdate
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

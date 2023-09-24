@@ -46,12 +46,10 @@ public class UIController : MonoBehaviour {
             
             Planet buffer = selected.GetComponent<Planet>();
 
-            // update input fields
-            inputFieldPositionX.text = ((float)buffer.position.x).ToString(); inputFieldPositionY.text = ((float)buffer.position.y).ToString();
-            inputFieldVelocityX.text = ((float)buffer.velocity.x).ToString(); inputFieldVelocityY.text = ((float)buffer.velocity.y).ToString();
-            inputFieldAccelerationX.text = ((float)buffer.acceleration.x).ToString(); inputFieldAccelerationY.text = ((float)buffer.acceleration.y).ToString();
-            inputFieldForceX.text = ((float)buffer.force.x).ToString(); inputFieldForceY.text = ((float)buffer.force.y).ToString();
-        
+            if(planetSystem.timeScale != 0) {
+                UpdatePlanetDataInputFields(buffer);
+            }
+
             // update text fields
             textMagnitudeVelocity.text = ((float)buffer.velocity.magnitude).ToString() + " m/s";
             textMagnitudeAcceleration.text = ((float)buffer.acceleration.magnitude).ToString() + " m/s²";
@@ -59,6 +57,13 @@ public class UIController : MonoBehaviour {
 
         }
 
+    }
+
+    public void UpdatePlanetDataInputFields(Planet planet) {
+        inputFieldPositionX.text = ((float)planet.position.x).ToString(); inputFieldPositionY.text = ((float)planet.position.y).ToString();
+        inputFieldVelocityX.text = ((float)planet.velocity.x).ToString(); inputFieldVelocityY.text = ((float)planet.velocity.y).ToString();
+        inputFieldAccelerationX.text = ((float)planet.acceleration.x).ToString(); inputFieldAccelerationY.text = ((float)planet.acceleration.y).ToString();
+        inputFieldForceX.text = ((float)planet.force.x).ToString(); inputFieldForceY.text = ((float)planet.force.y).ToString();
     }
 
     public void SetSelected(GameObject Planet) { // set Planet as the new selected planet
@@ -78,6 +83,8 @@ public class UIController : MonoBehaviour {
             textMagnitudeAcceleration.text = "";
             textMagnitudeForce.text = "";
         
+        } else {
+            UpdatePlanetDataInputFields(selected.GetComponent<Planet>());
         }
     }
 
@@ -134,4 +141,45 @@ public class UIController : MonoBehaviour {
         }
     
     }
+    public void InputFieldPositionXUpdate() {
+        if(planetSystem.timeScale == 0 && selected != null) {
+            selected.GetComponent<Planet>().position.x = double.Parse(inputFieldPositionX.text);
+        }
+    }
+    public void InputFieldPositionYUpdate() {
+        if(planetSystem.timeScale == 0 && selected != null) {
+            selected.GetComponent<Planet>().position.y = double.Parse(inputFieldPositionY.text);
+        }
+    }
+    public void InputFieldVelocityXUpdate() {
+        if(planetSystem.timeScale == 0 && selected != null) {
+            selected.GetComponent<Planet>().velocity.x = double.Parse(inputFieldVelocityX.text);
+        }
+    }
+    public void InputFieldVelocityYUpdate() {
+        if(planetSystem.timeScale == 0 && selected != null) {
+            selected.GetComponent<Planet>().velocity.y = double.Parse(inputFieldVelocityY.text);
+        }
+    }
+    public void InputFieldAccelerationXUpdate() {
+        if(planetSystem.timeScale == 0 && selected != null) {
+            selected.GetComponent<Planet>().acceleration.x = double.Parse(inputFieldAccelerationX.text);
+        }
+    }
+    public void InputFieldAccelerationYUpdate() {
+        if(planetSystem.timeScale == 0 && selected != null) {
+            selected.GetComponent<Planet>().acceleration.y = double.Parse(inputFieldAccelerationY.text);
+        }
+    }
+    public void InputFieldForceXUpdate() {
+        if(planetSystem.timeScale == 0 && selected != null) {
+            selected.GetComponent<Planet>().force.x = double.Parse(inputFieldForceX.text);
+        }
+    }
+    public void InputFieldForceYUpdate() {
+        if(planetSystem.timeScale == 0 && selected != null) {
+            selected.GetComponent<Planet>().force.y = double.Parse(inputFieldForceY.text);
+        }
+    }
+
 }

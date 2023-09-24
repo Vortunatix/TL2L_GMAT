@@ -39,7 +39,7 @@ public class PlanetSystem : MonoBehaviour {
         for(int t = 0; t < timeScale; t++) {
 
             for(int i = 0; i < list.Length; i++) { // calculate new positions for each planet
-                list[i].GetComponent<Planet>().CalculateNextPosition(accuracy);
+                list[i].GetComponent<Planet>().CalculateNextPosition(1 / accuracy);
             }
 
             for(int i = 0; i < list.Length; i++) { // update positions of each planet
