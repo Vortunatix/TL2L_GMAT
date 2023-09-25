@@ -27,6 +27,8 @@ public class UIController : MonoBehaviour {
     public TMP_Text textMagnitudeAcceleration;
     public TMP_InputField inputFieldForceX, inputFieldForceY;
     public TMP_Text textMagnitudeForce;
+    public TMP_InputField inputFieldMass;
+    public TMP_InputField inputFieldDiameter;
 
 
 
@@ -64,6 +66,8 @@ public class UIController : MonoBehaviour {
         inputFieldVelocityX.text = ((float)planet.velocity.x).ToString(); inputFieldVelocityY.text = ((float)planet.velocity.y).ToString();
         inputFieldAccelerationX.text = ((float)planet.acceleration.x).ToString(); inputFieldAccelerationY.text = ((float)planet.acceleration.y).ToString();
         inputFieldForceX.text = ((float)planet.force.x).ToString(); inputFieldForceY.text = ((float)planet.force.y).ToString();
+        inputFieldMass.text = ((float)planet.mass).ToString();
+        inputFieldDiameter.text = ((float)planet.diameter).ToString();
     }
 
     public void SetSelected(GameObject Planet) { // set Planet as the new selected planet
@@ -82,7 +86,10 @@ public class UIController : MonoBehaviour {
             textMagnitudeVelocity.text = "";
             textMagnitudeAcceleration.text = "";
             textMagnitudeForce.text = "";
-        
+
+            inputFieldMass.text = "";
+            inputFieldDiameter.text = "";
+
         } else {
             UpdatePlanetDataInputFields(selected.GetComponent<Planet>());
         }
@@ -109,7 +116,7 @@ public class UIController : MonoBehaviour {
         }
         while(buffer > 1) { // count seconds
             buffer--;
-            secondsPassed++;
+            secondsPassed++;/home/felix/3DPrints/Desk_Fan/Stl_Files/Base_v.1.0.stl
         }*/
         return hoursPassed.ToString() + " h, " + daysPassed.ToString() + " d, " + yearsPassed.ToString() + " y";
     }
@@ -120,6 +127,15 @@ public class UIController : MonoBehaviour {
         sliderSpeed.value = 0;
         inputFieldSpeed.text = "0";
     
+    }
+
+    public void AddPlanet() {
+        
+        if(planetSystem.timeScale == 0) { // if paused
+        
+            planetSystem.NewPlanet(); // add new planet to simulation
+        
+        }
     }
 
     public void SliderSpeedUpdate() { // called when sliderspeed updates
@@ -142,43 +158,56 @@ public class UIController : MonoBehaviour {
     
     }
     public void InputFieldPositionXUpdate() {
-        if(planetSystem.timeScale == 0 && selected != null) {
+        if(planetSystem.timeScale == 0 && selected != null && inputFieldPositionX.text != "") {
             selected.GetComponent<Planet>().position.x = double.Parse(inputFieldPositionX.text);
+            selected.GetComponent<Planet>().UpdatePosition();
         }
     }
     public void InputFieldPositionYUpdate() {
-        if(planetSystem.timeScale == 0 && selected != null) {
+        if(planetSystem.timeScale == 0 && selected != null && inputFieldPositionY.text != "") {
             selected.GetComponent<Planet>().position.y = double.Parse(inputFieldPositionY.text);
+            selected.GetComponent<Planet>().UpdatePosition();
         }
     }
     public void InputFieldVelocityXUpdate() {
-        if(planetSystem.timeScale == 0 && selected != null) {
+        if(planetSystem.timeScale == 0 && selected != null && inputFieldVelocityX.text != "") {
             selected.GetComponent<Planet>().velocity.x = double.Parse(inputFieldVelocityX.text);
         }
     }
     public void InputFieldVelocityYUpdate() {
-        if(planetSystem.timeScale == 0 && selected != null) {
+        if(planetSystem.timeScale == 0 && selected != null && inputFieldVelocityY.text != "") {
             selected.GetComponent<Planet>().velocity.y = double.Parse(inputFieldVelocityY.text);
         }
     }
     public void InputFieldAccelerationXUpdate() {
-        if(planetSystem.timeScale == 0 && selected != null) {
+        if(planetSystem.timeScale == 0 && selected != null && inputFieldAccelerationX.text != "") {
             selected.GetComponent<Planet>().acceleration.x = double.Parse(inputFieldAccelerationX.text);
         }
     }
     public void InputFieldAccelerationYUpdate() {
-        if(planetSystem.timeScale == 0 && selected != null) {
+        if(planetSystem.timeScale == 0 && selected != null && inputFieldAccelerationY.text != "") {
             selected.GetComponent<Planet>().acceleration.y = double.Parse(inputFieldAccelerationY.text);
         }
     }
     public void InputFieldForceXUpdate() {
-        if(planetSystem.timeScale == 0 && selected != null) {
+        if(planetSystem.timeScale == 0 && selected != null && inputFieldForceX.text != "") {
             selected.GetComponent<Planet>().force.x = double.Parse(inputFieldForceX.text);
         }
     }
     public void InputFieldForceYUpdate() {
-        if(planetSystem.timeScale == 0 && selected != null) {
+        if(planetSystem.timeScale == 0 && selected != null && inputFieldForceY.text != "") {
             selected.GetComponent<Planet>().force.y = double.Parse(inputFieldForceY.text);
+        }
+    }
+    public void InputFieldMassUpdate() {
+        if(planetSystem.timeScale == 0 && selected != null && inputFieldMass.text != "") {
+            selected.GetComponent<Planet>().mass = float.Parse(inputFieldMass.text);
+        }
+    }
+    public void InputFieldDiameterUpdate() {
+        if(planetSystem.timeScale == 0 && selected != null && inputFieldDiameter.text != "") {
+            selected.GetComponent<Planet>().diameter = float.Parse(inputFieldDiameter.text);
+            selected.GetComponent<Planet>().UpdateDiameter();
         }
     }
 

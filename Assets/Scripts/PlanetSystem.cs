@@ -12,6 +12,8 @@ public class PlanetSystem : MonoBehaviour {
     
     public GameObject SelectedPlanet;
 
+    public GameObject planetPrefab;
+
     public UIController uiController;
 
     public GameObject[] list; // list of all planet that interact with each other
@@ -34,22 +36,26 @@ public class PlanetSystem : MonoBehaviour {
 
     void Update() {
 
-        timePassed = timePassed + timeScale  * accuracy; // update time within simulation
+        if(timeScale > 0) { // if time is not paused
 
-        for(int t = 0; t < timeScale; t++) {
+            timePassed = timePassed + timeScale  * accuracy; // update time within simulation
 
-            for(int i = 0; i < list.Length; i++) { // calculate new positions for each planet
-                list[i].GetComponent<Planet>().CalculateNextPosition(1 / accuracy);
+            for(int t = 0; t < timeScale; t++) {
+
+                for(int i = 0; i < list.Length; i++) { // calculate new positions for each planet
+                    list[i].GetComponent<Planet>().CalculateNextPosition(1 / accuracy);
+                }
+
+                for(int i = 0; i < list.Length; i++) { // update positions of each planet
+                    list[i].GetComponent<Planet>().EnforceNextPosition();
+                }
+
             }
 
-            for(int i = 0; i < list.Length; i++) { // update positions of each planet
-                list[i].GetComponent<Planet>().EnforceNextPosition();
+            for(int i = 0; i < list.Length; i++) { // update positions of each planet on screen
+                    list[i].GetComponent<Planet>().UpdatePosition();
             }
 
-        }
-
-        for(int i = 0; i < list.Length; i++) { // update positions of each planet on screen
-                list[i].GetComponent<Planet>().UpdatePosition();
         }
 
         
@@ -89,6 +95,31 @@ public class PlanetSystem : MonoBehaviour {
     public void DeselectPlanet() {
         SelectedPlanet = null;
         uiController.SetSelected(null);
+    }
+
+    public void NewPlanet() {
+
+        GameObject[] buffer = new GameObject[list.Length]; 
+
+        buffer = list; // copy current list to buffer
+
+        list = new GameObject[buffer.Length + 1]; // enlarge list by 1
+
+        for(int i = 0; i < buffer.Length; i++) { // copy buffer back to list
+            list[i] = buffer[i];
+        }
+
+        GameObject buffer2 = Instantiate(planetPrefab, gameObject.transform); // instantiate new planet
+
+        // set values of planet to 0
+        buffer2.GetComponent<Planet>().mass = 0f;
+        buffer2.GetComponent<Planet>().position = new Vector2d(0, 0);
+        buffer2.GetComponent<Planet>().velocity = new Vector2d(0, 0);
+        buffer2.GetComponent<Planet>().acceleration = new Vector2d(0, 0);
+        buffer2.GetComponent<Planet>().force = new Vector2d(0, 0);
+
+        list[list.Length - 1] = buffer2; // insert new planet into list
+
     }
 
 }

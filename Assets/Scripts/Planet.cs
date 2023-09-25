@@ -40,6 +40,7 @@ public class Planet : MonoBehaviour {
         Outline = gameObject.transform.GetChild(0).gameObject;
         Path = gameObject.transform.GetChild(4).gameObject;
         lastVelocityVector = velocity;
+        // only for editor use
         position.Set(initialPosition.x, initialPosition.y);
         velocity.Set(initialVelocity.x, initialVelocity.y);
 
@@ -51,8 +52,6 @@ public class Planet : MonoBehaviour {
     }
 
     void Update() {
-
-        lastVelocityVector = velocity; // update the last velocity vector
 
         cameraScale = Camera.GetComponent<Camera>().orthographicSize;
         NameTag.transform.localScale = new Vector3(cameraScale * infoTextSize, cameraScale * infoTextSize, cameraScale * infoTextSize); // update nametag size
@@ -141,6 +140,12 @@ public class Planet : MonoBehaviour {
             Outline.SetActive(true);
             PlanetSystem.GetComponent<PlanetSystem>().SetSelectedPlanet(gameObject);
         }
+    }
+
+    public void UpdateDiameter() {
+
+        Sprite.transform.localScale = new Vector3(diameter / globalScale, diameter / globalScale, 1); // update planet sprite scale 
+
     }
 
 }
