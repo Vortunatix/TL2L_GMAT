@@ -59,6 +59,13 @@ public class UIController : MonoBehaviour {
 
         }
 
+        if(Input.GetKey(KeyCode.Delete)) {
+
+            
+            DeleteSelectedPlanet();
+
+        }
+
     }
 
     public void UpdatePlanetDataInputFields(Planet planet) {
@@ -136,6 +143,16 @@ public class UIController : MonoBehaviour {
             planetSystem.NewPlanet(); // add new planet to simulation
         
         }
+    }
+
+    public void DeleteSelectedPlanet() {
+
+        if(planetSystem.timeScale == 0 && selected != null) {
+
+            planetSystem.DeletePlanet(selected);
+
+        }
+
     }
 
     public void SliderSpeedUpdate() { // called when sliderspeed updates

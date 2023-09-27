@@ -6,12 +6,11 @@ using System;
 
 public class Planet : MonoBehaviour {
     
-    private GameObject PlanetSystem, Sprite, Shadow, Outline, NameTag, SelectorButton, Path, Camera;
+    public GameObject planetSystem, Sprite, Shadow, Outline, NameTag, SelectorButton, Path, Camera;
     private float infoTextSize = 0.125f; // scale of name tag
 
     public float diameter;
     public float mass;
-    public float graviationalAcceleration;
 
     private float time; // multiplier for size of calcjlated steps
     private long globalScale; // global scaling factor for calculating the coordinates determining where to draw the sprites
@@ -30,16 +29,17 @@ public class Planet : MonoBehaviour {
     void Start() {
 
         //initialize all variables
-        PlanetSystem = gameObject.transform.parent.gameObject;
+        planetSystem = gameObject.transform.parent.gameObject;
         Sprite = gameObject.transform.GetChild(2).gameObject;
         NameTag = gameObject.transform.GetChild(3).gameObject.transform.GetChild(0).gameObject;
         SelectorButton = gameObject.transform.GetChild(3).gameObject.transform.GetChild(1).gameObject;
-        globalScale = PlanetSystem.GetComponent<PlanetSystem>().globalScale;
-        Camera = PlanetSystem.GetComponent<PlanetSystem>().Camera;
+        globalScale = planetSystem.GetComponent<PlanetSystem>().globalScale;
+        Camera = planetSystem.GetComponent<PlanetSystem>().Camera;
         Shadow = gameObject.transform.GetChild(1).gameObject;
         Outline = gameObject.transform.GetChild(0).gameObject;
         Path = gameObject.transform.GetChild(4).gameObject;
         lastVelocityVector = velocity;
+        selected = false;
         // only for editor use
         position.Set(initialPosition.x, initialPosition.y);
         velocity.Set(initialVelocity.x, initialVelocity.y);
@@ -80,9 +80,9 @@ public class Planet : MonoBehaviour {
 
         force = Vector2d.zero; // reset forces
 
-            for(int i = 0; i < PlanetSystem.GetComponent<PlanetSystem>().list.Length; i++) { // calculate for every planet in list
+            for(int i = 0; i < planetSystem.transform.childCount; i++) { // calculate for every planet in list
 
-                Planet buffer = PlanetSystem.GetComponent<PlanetSystem>().list[i].GetComponent<Planet>(); // create buffer variable
+                Planet buffer = planetSystem.transform.GetChild(i).GetComponent<Planet>(); // create buffer variable
 
                 Vector2d deltaPosition = new Vector2d(buffer.position.x - position.x, buffer.position.y - position.y); // calculate distance of the bodies
 
@@ -122,11 +122,11 @@ public class Planet : MonoBehaviour {
 
     public void SetSelected(bool state) {
         selected = state;
-        Outline.SetActive(state);
+        Outline.SetActive(selected);
         if(state == true) {
-            PlanetSystem.GetComponent<PlanetSystem>().SetSelectedPlanet(gameObject);
+            planetSystem.GetComponent<PlanetSystem>().SetSelectedPlanet(gameObject);
         } else {
-            PlanetSystem.GetComponent<PlanetSystem>().DeselectPlanet();
+            planetSystem.GetComponent<PlanetSystem>().DeselectPlanet();
         }
     }
 
@@ -134,11 +134,11 @@ public class Planet : MonoBehaviour {
         if(selected) {
             selected = false;
             Outline.SetActive(false);
-            PlanetSystem.GetComponent<PlanetSystem>().DeselectPlanet();
+            planetSystem.GetComponent<PlanetSystem>().DeselectPlanet();
         } else {
             selected = true;
             Outline.SetActive(true);
-            PlanetSystem.GetComponent<PlanetSystem>().SetSelectedPlanet(gameObject);
+            planetSystem.GetComponent<PlanetSystem>().SetSelectedPlanet(gameObject);
         }
     }
 

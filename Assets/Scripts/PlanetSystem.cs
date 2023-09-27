@@ -16,7 +16,6 @@ public class PlanetSystem : MonoBehaviour {
 
     public UIController uiController;
 
-    public GameObject[] list; // list of all planet that interact with each other
     public long globalScale; // global scaling factor, globalScale (irl size) = 1 unit within simulation (displayed size) 
     public float timeScale; // calculations that one planet per update repeats, higher results in both faster and less accurate simulation
     public double timePassed; // amount of time passed in the simulation
@@ -42,18 +41,18 @@ public class PlanetSystem : MonoBehaviour {
 
             for(int t = 0; t < timeScale; t++) {
 
-                for(int i = 0; i < list.Length; i++) { // calculate new positions for each planet
-                    list[i].GetComponent<Planet>().CalculateNextPosition(1 / accuracy);
+                for(int i = 0; i < gameObject.transform.childCount; i++) { // calculate new positions for each planet
+                    gameObject.transform.GetChild(i).GetComponent<Planet>().CalculateNextPosition(1 / accuracy);
                 }
 
-                for(int i = 0; i < list.Length; i++) { // update positions of each planet
-                    list[i].GetComponent<Planet>().EnforceNextPosition();
+                for(int i = 0; i < gameObject.transform.childCount; i++) { // update positions of each planet
+                    gameObject.transform.GetChild(i).GetComponent<Planet>().EnforceNextPosition();
                 }
 
             }
 
-            for(int i = 0; i < list.Length; i++) { // update positions of each planet on screen
-                    list[i].GetComponent<Planet>().UpdatePosition();
+            for(int i = 0; i < gameObject.transform.childCount; i++) { // update positions of each planet on screen
+                    gameObject.transform.GetChild(i).GetComponent<Planet>().UpdatePosition();
             }
 
         }
@@ -76,9 +75,9 @@ public class PlanetSystem : MonoBehaviour {
 
     public float GetHighestAngleChange() { // returns the highest angle change per update cycle in the system
         float buffer = 0;
-        for(int i=0; i < list.Length; i++) {
-            if(Math.Abs(list[i].GetComponent<Planet>().GetAngleChange()) > buffer) {
-                buffer = Math.Abs(list[i].GetComponent<Planet>().GetAngleChange());
+        for(int i=0; i < gameObject.transform.childCount; i++) {
+            if(Math.Abs(gameObject.transform.GetChild(i).GetComponent<Planet>().GetAngleChange()) > buffer) {
+                buffer = Math.Abs(gameObject.transform.GetChild(i).GetComponent<Planet>().GetAngleChange());
             }
         }
         return buffer;
@@ -99,26 +98,42 @@ public class PlanetSystem : MonoBehaviour {
 
     public void NewPlanet() {
 
-        GameObject[] buffer = new GameObject[list.Length]; 
+        GameObject buffer; 
 
-        buffer = list; // copy current list to buffer
+        buffer = Instantiate(planetPrefab, gameObject.transform); // instantiate new planet        
 
-        list = new GameObject[buffer.Length + 1]; // enlarge list by 1
+        if(SelectedPlanet == null) {
 
-        for(int i = 0; i < buffer.Length; i++) { // copy buffer back to list
-            list[i] = buffer[i];
+            // set all variables to 0
+            buffer.GetComponent<Planet>().mass = 0f;
+            buffer.GetComponent<Planet>().position = new Vector2d(0, 0);
+            buffer.GetComponent<Planet>().velocity = new Vector2d(0, 0);
+            buffer.GetComponent<Planet>().acceleration = new Vector2d(0, 0);
+            buffer.GetComponent<Planet>().force = new Vector2d(0, 0);
+
+        } else {
+
+            // copy planet data from selected planet
+            buffer.GetComponent<Planet>().mass = SelectedPlanet.GetComponent<Planet>().mass;
+            buffer.GetComponent<Planet>().position = Vector2d.zero;
+            buffer.GetComponent<Planet>().velocity = SelectedPlanet.GetComponent<Planet>().velocity;
+            buffer.GetComponent<Planet>().acceleration = Vector2d.zero;
+            buffer.GetComponent<Planet>().force = Vector2d.zero;
+            buffer.GetComponent<Planet>().diameter = SelectedPlanet.GetComponent<Planet>().diameter;
+
+            SelectedPlanet.GetComponent<Planet>().ToggleSelectedState();
+
         }
 
-        GameObject buffer2 = Instantiate(planetPrefab, gameObject.transform); // instantiate new planet
+    }
 
-        // set values of planet to 0
-        buffer2.GetComponent<Planet>().mass = 0f;
-        buffer2.GetComponent<Planet>().position = new Vector2d(0, 0);
-        buffer2.GetComponent<Planet>().velocity = new Vector2d(0, 0);
-        buffer2.GetComponent<Planet>().acceleration = new Vector2d(0, 0);
-        buffer2.GetComponent<Planet>().force = new Vector2d(0, 0);
+    public void DeletePlanet(GameObject ded) { // remove selected planet from both the simulation and existance
 
-        list[list.Length - 1] = buffer2; // insert new planet into list
+        if(SelectedPlanet == ded) { // deselect if it was selected
+            ded.GetComponent<Planet>().ToggleSelectedState();
+        }
+
+        Destroy(ded); // destroy planet to remove
 
     }
 
