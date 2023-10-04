@@ -63,7 +63,9 @@ public class CameraBehaviour : MonoBehaviour {
         */
 
         // zooming using the mouse wheel
-        mouseScrollDelta = mouseScrollDelta + Input.mouseScrollDelta.y; // increase mouseScrollDelta when scrolling
+        if(Input.mousePosition.x < 920) {
+            mouseScrollDelta = mouseScrollDelta + Input.mouseScrollDelta.y; // increase mouseScrollDelta when scrolling
+        }        
         if(mouseScrollDelta != 0f) { 
             mouseScrollDelta = mouseScrollDelta / scrollIntensity; // decrease mouseScrollDelta slightly
             if(mouseScrollDelta < 0.000001f && mouseScrollDelta > -0.000001f) { // set mouseScrollDelta to 0 if the value is too close to 0
@@ -76,8 +78,8 @@ public class CameraBehaviour : MonoBehaviour {
             if(orthographicScale < 1) { // set global scale to minimum if value is below 100
                 orthographicScale = 1;
             }
-            if(orthographicScale > 10e+10) {
-                orthographicScale = 10e+10f;
+            if(orthographicScale > 5000) {
+                orthographicScale = 5000;
             }
             gameObject.GetComponent<Camera>().orthographicSize = orthographicScale; // update orthographic scale
         }

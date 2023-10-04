@@ -20,6 +20,9 @@ public class UIController : MonoBehaviour {
     public TMP_InputField inputFieldAccuracy;
 
     // infoscreen references
+    public Transform infoscreen;
+    public Slider sliderScrollbar; 
+    public TMP_InputField inputFieldName;
     public TMP_InputField inputFieldPositionX, inputFieldPositionY;
     public TMP_InputField inputFieldVelocityX, inputFieldVelocityY;
     public TMP_Text textMagnitudeVelocity;
@@ -30,7 +33,9 @@ public class UIController : MonoBehaviour {
     public TMP_InputField inputFieldMass;
     public TMP_InputField inputFieldDiameter;
 
-
+    public float infoscreenScrollDelta;
+    public float infoscreenScrollSpeed;
+    public float infoscreenScrollDistance;
 
     void Start() {
 
@@ -41,6 +46,8 @@ public class UIController : MonoBehaviour {
     }
 
     void Update() {
+
+        //Debug.Log(Input.mousePosition);
 
         textTimePassed.text = GetTimePassedReadable(planetSystem.timePassed);
 
@@ -61,20 +68,36 @@ public class UIController : MonoBehaviour {
 
         if(Input.GetKey(KeyCode.Delete)) {
 
-            
             DeleteSelectedPlanet();
 
         }
 
+        if(Input.mousePosition.x > 920) {
+            infoscreenScrollDelta = infoscreenScrollDelta + Input.mouseScrollDelta.y  * infoscreenScrollDistance; // increase infoscreenScrollDelta when scrolling
+        }
+        if(infoscreenScrollDelta < 0.000001f && infoscreenScrollDelta > -0.000001f) { // set infoscreenScrollDelta to 0 if the value is too close to 0
+            infoscreenScrollDelta = 0;
+        }
+        if(infoscreenScrollDelta != 0) {
+            sliderScrollbar.value = sliderScrollbar.value + (infoscreenScrollDelta / infoscreenScrollSpeed);
+            infoscreenScrollDelta = infoscreenScrollDelta / infoscreenScrollSpeed;
+        }
+
+
+
+
     }
 
     public void UpdatePlanetDataInputFields(Planet planet) {
+
+        inputFieldName.text = planet.gameObject.name;
         inputFieldPositionX.text = ((float)planet.position.x).ToString(); inputFieldPositionY.text = ((float)planet.position.y).ToString();
         inputFieldVelocityX.text = ((float)planet.velocity.x).ToString(); inputFieldVelocityY.text = ((float)planet.velocity.y).ToString();
         inputFieldAccelerationX.text = ((float)planet.acceleration.x).ToString(); inputFieldAccelerationY.text = ((float)planet.acceleration.y).ToString();
         inputFieldForceX.text = ((float)planet.force.x).ToString(); inputFieldForceY.text = ((float)planet.force.y).ToString();
         inputFieldMass.text = ((float)planet.mass).ToString();
         inputFieldDiameter.text = ((float)planet.diameter).ToString();
+
     }
 
     public void SetSelected(GameObject Planet) { // set Planet as the new selected planet
@@ -85,6 +108,8 @@ public class UIController : MonoBehaviour {
         
         if(Planet == null) { // clear infoscreen from values
             
+            inputFieldName.text = "";
+
             inputFieldPositionX.text = ""; inputFieldPositionY.text = "";
             inputFieldVelocityX.text = ""; inputFieldVelocityY.text = "";
             inputFieldAccelerationX.text = ""; inputFieldAccelerationY.text = "";
@@ -152,6 +177,18 @@ public class UIController : MonoBehaviour {
             planetSystem.DeletePlanet(selected);
 
         }
+
+    }
+
+    public void ResetTime() {
+
+        planetSystem.timePassed = 0;
+    
+    }
+
+    public void SliderScrollbarUpdate() {
+
+        infoscreen.position = new Vector3(infoscreen.position.x, sliderScrollbar.value, 0);
 
     }
 
@@ -225,6 +262,11 @@ public class UIController : MonoBehaviour {
         if(planetSystem.timeScale == 0 && selected != null && inputFieldDiameter.text != "") {
             selected.GetComponent<Planet>().diameter = float.Parse(inputFieldDiameter.text);
             selected.GetComponent<Planet>().UpdateDiameter();
+        }
+    }
+    public void InputFieldNameUpdate() {
+        if(selected != null) {
+            selected.GetComponent<Planet>().UpdateName(inputFieldName.text);
         }
     }
 

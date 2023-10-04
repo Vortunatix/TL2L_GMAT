@@ -50,10 +50,13 @@ public class GridController : MonoBehaviour {
         topEdge = Cam.ScreenToWorldPoint(new Vector3(0, Cam.pixelHeight, 0)).y;
         bottomEdge = Cam.ScreenToWorldPoint(new Vector3(0, 0, 0)).y;
 
+        int stepSize = DigitAmount(Cam.orthographicSize) - 2;
+        if(stepSize < 1) {stepSize = 1;}
+
         // draw vertical Lines
-        int pos = (int)Math.Floor(leftEdge);
+        int pos = (int)Math.Floor(leftEdge / stepSize) * stepSize;
         int i = 0;
-        for(; pos <= Math.Ceiling(rightEdge); pos++) {
+        for(; pos <= Math.Ceiling(rightEdge); pos = pos + stepSize) {
             if(pos % Math.Pow(10, DigitAmount(Cam.orthographicSize)) == 0) { // if current position is multiple of 10 draw new line
                 if(gridLines[i] == null) { // instanciate new line if needed
                     gridLines[i] = Instantiate(gridLine, gameObject.transform);
@@ -72,8 +75,8 @@ public class GridController : MonoBehaviour {
         }
 
         // draw horizontal lines
-        pos = (int)Math.Floor(bottomEdge);
-        for(; pos <= Math.Ceiling(topEdge); pos++) {
+        pos = (int)Math.Floor(bottomEdge / stepSize) * stepSize;
+        for(; pos <= Math.Ceiling(topEdge); pos = pos + stepSize) {
             if(pos % Math.Pow(10, DigitAmount(Cam.orthographicSize)) == 0) { // if current position is multiple of 10 draw new line
                 if(gridLines[i] == null) { // instanciate new line if needed
                     gridLines[i] = Instantiate(gridLine, gameObject.transform);

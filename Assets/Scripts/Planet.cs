@@ -148,4 +148,11 @@ public class Planet : MonoBehaviour {
 
     }
 
+    public void UpdateName(string newName) {
+
+        gameObject.name = newName;
+        NameTag.GetComponent<TMPro.TextMeshProUGUI>().text = gameObject.name;
+
+    }
+
 }
