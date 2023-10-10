@@ -18,8 +18,13 @@ public class CameraBehaviour : MonoBehaviour {
     public float mouseScrollDelta; // how much the mousewheel moved since last update
     public float scrollIntensity; // how sensitive the mousewheel reacts, higher value results in higher sensitivity
 
+    private int screenWidth; // width of screen in pixels
+
     void Start() {
+
+        screenWidth = gameObject.GetComponent<Camera>().pixelWidth;
         TrackObject(null);
+    
     }
 
     void Update() {
@@ -63,7 +68,7 @@ public class CameraBehaviour : MonoBehaviour {
         */
 
         // zooming using the mouse wheel
-        if(Input.mousePosition.x < 920) {
+        if(Input.mousePosition.x < screenWidth - 340) {
             mouseScrollDelta = mouseScrollDelta + Input.mouseScrollDelta.y; // increase mouseScrollDelta when scrolling
         }        
         if(mouseScrollDelta != 0f) { 

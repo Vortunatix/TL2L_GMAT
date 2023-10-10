@@ -7,7 +7,6 @@ using TMPro;
 
 public class PlanetSystem : MonoBehaviour {
 
-    //public GameObject CenterOfMassSprite;
     public GameObject Camera;
     
     public GameObject SelectedPlanet;
@@ -56,8 +55,6 @@ public class PlanetSystem : MonoBehaviour {
             }
 
         }
-
-        
 
     }
 
@@ -134,6 +131,34 @@ public class PlanetSystem : MonoBehaviour {
         }
 
         Destroy(ded); // destroy planet to remove
+
+    }
+
+    public Vector2d GetCenterOfMass() { // returns the position of the center of mass
+
+        double totalMass = GetTotalMass();
+        Vector2d center = Vector2d.zero;
+        Planet buffer;
+
+        for(int i = 0; i < gameObject.transform.childCount; i++) {
+            buffer = gameObject.transform.GetChild(i).GetComponent<Planet>();
+            center.x = center.x + buffer.position.x * (buffer.mass / totalMass); 
+            center.y = center.y + buffer.position.y * (buffer.mass / totalMass); 
+        }
+
+        return center;
+
+    }
+
+    public double GetTotalMass() { // returns the amount of the total mass present in the simulated system
+
+        double mass = 0;
+
+        for(int i = 0; i < gameObject.transform.childCount; i++) {
+            mass = mass + gameObject.transform.GetChild(i).GetComponent<Planet>().mass;
+        }
+
+        return mass;
 
     }
 

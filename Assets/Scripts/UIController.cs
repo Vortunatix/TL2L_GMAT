@@ -14,10 +14,10 @@ public class UIController : MonoBehaviour {
     public TMP_Text textTimePassed;
 
     // speed control references
-    public TMP_InputField inputFieldSpeed;
-    public Slider sliderSpeed;
+    public TMP_InputField inputFieldSpeed; // input field for manually entering simulation speed
+    public Slider sliderSpeed; // slider for controlling simulation speed
 
-    public TMP_InputField inputFieldAccuracy;
+    public TMP_InputField inputFieldAccuracy; // input filed for accuracy
 
     // infoscreen references
     public Transform infoscreen;
@@ -33,11 +33,26 @@ public class UIController : MonoBehaviour {
     public TMP_InputField inputFieldMass;
     public TMP_InputField inputFieldDiameter;
 
-    public float infoscreenScrollDelta;
-    public float infoscreenScrollSpeed;
-    public float infoscreenScrollDistance;
+    public float infoscreenScrollDelta; // how much the scrollbar has yet to scroll
+    public float infoscreenScrollSpeed; // how fast the scrollbar is moving towards its target position, higher means slower
+    public float infoscreenScrollDistancePerStep; // how much the infoscreen in scrolled when doing one step with the mousewheel
+    public float infoscreenHeight; // required height to display all elements of infoscreen simultaneously
+
+    private int screenWidth; // width of screen in pixels
+    private int screenHeight; // height of screen in pixels
+
+    public GameObject SpriteCenterOfMass; // sprite indicating the center of mass
+    private Vector2d positionCenterOfMass;
 
     void Start() {
+
+        screenWidth = mainCamera.GetComponent<Camera>().pixelWidth;
+        screenHeight = mainCamera.GetComponent<Camera>().pixelHeight;
+
+        sliderScrollbar.gameObject.transform.localScale = new Vector3((float)screenHeight / 640f, 1, 1);
+        if(infoscreenHeight - screenHeight <= 0) { // if scrollbar is not required due to screen being large enough
+            sliderScrollbar.gameObject.SetActive(false);
+        }
 
         inputFieldAccuracy.text = "1";
         planetSystem.accuracy = 1;
@@ -47,7 +62,8 @@ public class UIController : MonoBehaviour {
 
     void Update() {
 
-        //Debug.Log(Input.mousePosition);
+        positionCenterOfMass = planetSystem.GetCenterOfMass();
+        SpriteCenterOfMass.transform.localPosition = new Vector3((float)(positionCenterOfMass.x / planetSystem.globalScale), (float)(positionCenterOfMass.y / planetSystem.globalScale), -10);
 
         textTimePassed.text = GetTimePassedReadable(planetSystem.timePassed);
 
@@ -72,8 +88,8 @@ public class UIController : MonoBehaviour {
 
         }
 
-        if(Input.mousePosition.x > 920) {
-            infoscreenScrollDelta = infoscreenScrollDelta + Input.mouseScrollDelta.y  * infoscreenScrollDistance; // increase infoscreenScrollDelta when scrolling
+        if(Input.mousePosition.x > screenWidth - 340) {
+            infoscreenScrollDelta = infoscreenScrollDelta + Input.mouseScrollDelta.y  * infoscreenScrollDistancePerStep; // increase infoscreenScrollDelta when scrolling
         }
         if(infoscreenScrollDelta < 0.000001f && infoscreenScrollDelta > -0.000001f) { // set infoscreenScrollDelta to 0 if the value is too close to 0
             infoscreenScrollDelta = 0;
@@ -83,7 +99,8 @@ public class UIController : MonoBehaviour {
             infoscreenScrollDelta = infoscreenScrollDelta / infoscreenScrollSpeed;
         }
 
-
+        positionCenterOfMass = planetSystem.GetCenterOfMass();
+        SpriteCenterOfMass.transform.localPosition = new Vector3((float)(positionCenterOfMass.x / planetSystem.globalScale), (float)(positionCenterOfMass.y / planetSystem.globalScale), -10);
 
 
     }
@@ -188,7 +205,9 @@ public class UIController : MonoBehaviour {
 
     public void SliderScrollbarUpdate() {
 
-        infoscreen.position = new Vector3(infoscreen.position.x, sliderScrollbar.value, 0);
+                infoscreen.position = new Vector3(infoscreen.position.x, sliderScrollbar.value, 0);
+
+        //infoscreen.position = new Vector3(infoscreen.position.x, sliderScrollbar.value * -mainCamera.GetComponent<Camera>().ScreenToWorldPoint(new Vector3(0, infoscreenHeight - screenHeight, 0)).y, 0);
 
     }
 
