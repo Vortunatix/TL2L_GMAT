@@ -99,9 +99,10 @@ public class UIController : MonoBehaviour {
             infoscreenScrollDelta = infoscreenScrollDelta / infoscreenScrollSpeed;
         }
 
-        positionCenterOfMass = planetSystem.GetCenterOfMass();
-        SpriteCenterOfMass.transform.localPosition = new Vector3((float)(positionCenterOfMass.x / planetSystem.globalScale), (float)(positionCenterOfMass.y / planetSystem.globalScale), -10);
-
+        if(SpriteCenterOfMass.activeSelf) {
+            positionCenterOfMass = planetSystem.GetCenterOfMass();
+            SpriteCenterOfMass.transform.localPosition = new Vector3((float)(positionCenterOfMass.x / planetSystem.globalScale), (float)(positionCenterOfMass.y / planetSystem.globalScale), -10);
+        }
 
     }
 
@@ -286,6 +287,14 @@ public class UIController : MonoBehaviour {
     public void InputFieldNameUpdate() {
         if(selected != null) {
             selected.GetComponent<Planet>().UpdateName(inputFieldName.text);
+        }
+    }
+
+    public void SpriteCenterOfMassToggleActive() {
+        if(SpriteCenterOfMass.activeSelf) {
+            SpriteCenterOfMass.SetActive(false);
+        } else {
+            SpriteCenterOfMass.SetActive(true);
         }
     }
 
