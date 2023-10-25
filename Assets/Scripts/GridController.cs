@@ -77,8 +77,6 @@ public class GridController : MonoBehaviour {
             }
         }
 
-        Debug.Log(counter);
-
         // draw horizontal lines
         pos = (int)Math.Floor(bottomEdge / stepSize) * stepSize;
         for(; pos <= Math.Ceiling(topEdge); pos = pos + stepSize) {
