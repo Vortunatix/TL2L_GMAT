@@ -329,13 +329,13 @@ public class UIController : MonoBehaviour {
     }
 
     public void InputFieldBurnRateUpdate() {
-        if(planetSystem.timeScale == 0 && selected != null && inputFieldBurnRate.text != "") {
+        if(planetSystem.timeScale == 0 && selected != null && inputFieldBurnRate.text != "" && selected.GetComponent<Planet>().type == 'r') {
             selected.GetComponent<Planet>().burnRate = float.Parse(inputFieldBurnRate.text);
         }
     }
 
     public void InputFieldThrustUpdate() {
-        if(planetSystem.timeScale == 0 && selected != null && inputFieldThrust.text != "") {
+        if(planetSystem.timeScale == 0 && selected != null && inputFieldThrust.text != "" && selected.GetComponent<Planet>().type == 'r') {
             selected.GetComponent<Planet>().thrust = double.Parse(inputFieldThrust.text);
         }
     }
