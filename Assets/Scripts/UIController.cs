@@ -24,6 +24,7 @@ public class UIController : MonoBehaviour {
     public Slider sliderScrollbar; 
     public TMP_InputField inputFieldName;
     public TMP_InputField inputFieldPositionX, inputFieldPositionY;
+    public TMP_Text textMagnitudePosition;
     public TMP_InputField inputFieldVelocityX, inputFieldVelocityY;
     public TMP_Text textMagnitudeVelocity;
     public TMP_InputField inputFieldAccelerationX, inputFieldAccelerationY;
@@ -114,6 +115,7 @@ public class UIController : MonoBehaviour {
         inputFieldMass.text = ((float)planet.mass).ToString();
         inputFieldDiameter.text = ((float)planet.diameter).ToString();
 
+        textMagnitudePosition.text = ((float)planet.position.magnitude).ToString() + " m";
         textMagnitudeVelocity.text = ((float)planet.velocity.magnitude).ToString() + " m/s";
         textMagnitudeAcceleration.text = ((float)planet.acceleration.magnitude).ToString() + " m/s²";
         textMagnitudeForce.text = ((float)planet.force.magnitude).ToString() + " N";
@@ -147,6 +149,7 @@ public class UIController : MonoBehaviour {
             inputFieldAccelerationX.text = ""; inputFieldAccelerationY.text = "";
             inputFieldForceX.text = ""; inputFieldForceY.text = "";
 
+            textMagnitudePosition.text = "";
             textMagnitudeVelocity.text = "";
             textMagnitudeAcceleration.text = "";
             textMagnitudeForce.text = "";
