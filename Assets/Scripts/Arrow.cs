@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class ArrowController : MonoBehaviour {
+public class Arrow : MonoBehaviour {
     
     public LineRenderer line;
     public Transform tip;
@@ -29,33 +29,37 @@ public class ArrowController : MonoBehaviour {
         SetColor(color);
         start = new Vector3(0, 0, zOffset);
         end = new Vector3(0, 0, zOffset);
+        Cam = GameObject.Find("Main Camera").GetComponent<Camera>();
 
     }
 
     void Update() {
 
-        SetEndPosition(Cam.ScreenToWorldPoint(Input.mousePosition));
-
+        //adjust scale
         scale = Cam.orthographicSize;
         if(oldScale != scale) {
-            SetScale(Cam.orthographicSize * size); 
+            SetSize(Cam.orthographicSize * size); 
         }
         oldScale = scale;
 
     }
 
     public void SetStartPosition(Vector3 position) {
+        Debug.Log("Start" + position);
         start = position;
         start.z = zOffset;
         line.SetPosition(0, position);
         distance = end - start;
+        Debug.Log(distance);
         UpdateTip();
         UpdateRotation();
     }
     public void SetEndPosition(Vector3 position) {
+        Debug.Log("End" + position);
         end = position;
         end.z = zOffset;
         distance = end - start;
+        Debug.Log(distance);
         UpdateTip();
         UpdateRotation();
     }
@@ -64,12 +68,13 @@ public class ArrowController : MonoBehaviour {
  
         Vector3 tipOffset = distance * ((distanceToTip * scale) / distance.magnitude);
 
+        Debug.Log("update"+end+tipOffset);
         tip.localPosition = end - tipOffset;
         line.SetPosition(1, end - tipOffset);
 
     }
 
-    public void SetScale(float newScale) {
+    public void SetSize(float newScale) {
 
         scale = newScale;
         
@@ -80,7 +85,7 @@ public class ArrowController : MonoBehaviour {
 
     }
 
-    public void UpdateRotation() { // calculate roation for tip sprite
+    private void UpdateRotation() { // calculate roation for tip sprite
 
         if(distance != Vector3.zero) {
         

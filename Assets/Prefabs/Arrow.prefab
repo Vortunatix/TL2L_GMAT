@@ -187,6 +187,8 @@ MonoBehaviour:
   start: {x: 0, y: 0, z: 0}
   end: {x: 0, y: 0, z: 0}
   color: {r: 0, g: 0, b: 0, a: 0}
+  Cam: {fileID: 0}
+  size: 0.05
 --- !u!1 &8727171727169282285
 GameObject:
   m_ObjectHideFlags: 0

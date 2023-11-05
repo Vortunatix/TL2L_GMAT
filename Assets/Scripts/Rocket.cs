@@ -4,8 +4,9 @@ using UnityEngine;
 using Unity.Jobs;
 using System;
 
-public class Planet : MonoBehaviour {
-    
+[AddComponentMenu("Planet")]
+public class Rocket : MonoBehaviour {
+
     public GameObject planetSystem, Sprite, Shadow, Outline, NameTag, SelectorButton, Path, Camera;
     private protected float infoTextSize = 0.125f; // scale of name tag
 
@@ -44,12 +45,6 @@ public class Planet : MonoBehaviour {
     public float burnRate; // burn rate in kg / second
     public double thrust; // thrust resulting from burning 1 kg / second
 
-    private double thrustMultiplierX;
-    private double thrustMultiplierY;
-    private double adjustedThrust;
-
-    public char type; // what type of celestial body this is
-
     void Start() {    
 
         //initialize all variables
@@ -64,7 +59,6 @@ public class Planet : MonoBehaviour {
         Path = gameObject.transform.GetChild(4).gameObject;
         lastVelocityVector = velocity;
         selected = false;
-        type = 'p'; // set the type of the body to planet
         //arrowsForce.SetActive(false);
         //arrowsVelocity.SetActive(false);
         // only for editor use
@@ -124,21 +118,15 @@ public class Planet : MonoBehaviour {
 
         }
 
-        if(type == 'r' && mass > burnRate * time) { // if the body is a rocket and there is sufficient Fuel
-            
-            float currentBurnRate = burnRate * time; // amount of fuel burnt in the current update
+        float currentBurnRate = burnRate * time; // fuel burnt in the current update
 
-            mass = mass - currentBurnRate; // remove the burnt mass from the body
+        mass = mass - currentBurnRate; // remove the burnt mass from the body
 
-            thrustMultiplierX = lastVelocityVector.x / lastVelocityVector.magnitude;
-            thrustMultiplierY = lastVelocityVector.y / lastVelocityVector.magnitude;
+        double thrustMultiplierX = lastVelocityVector.x / lastVelocityVector.magnitude;
+        double thrustMultiplierY = lastVelocityVector.y / lastVelocityVector.magnitude;
 
-            adjustedThrust = thrust * currentBurnRate; // adjust thrust to burn rate
-
-            force.x = force.x + adjustedThrust * thrustMultiplierX; // increase the force affecting the body by thrust along the x axis
-            force.y = force.y + adjustedThrust * thrustMultiplierY; // increase the force affecting the body by thrust along the x axis
-
-        }
+        force.x = force.x + thrust * thrustMultiplierX; // increase the force affecting the body by thrust along the x axis
+        force.y = force.y + thrust * thrustMultiplierY; // increase the force affecting the body by thrust along the x axis
 
         acceleration.x = (float)(force.x / mass); // update acceleration affecting the planet along the x axis
         acceleration.y = (float)(force.y / mass); // update acceleration affecting the planet along the y axis

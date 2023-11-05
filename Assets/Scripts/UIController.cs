@@ -32,6 +32,9 @@ public class UIController : MonoBehaviour {
     public TMP_Text textMagnitudeForce;
     public TMP_InputField inputFieldMass;
     public TMP_InputField inputFieldDiameter;
+    public Toggle toggleIsRocket;
+    public TMP_InputField inputFieldBurnRate;
+    public TMP_InputField inputFieldThrust;
 
     public float infoscreenScrollDelta; // how much the scrollbar has yet to scroll
     public float infoscreenScrollSpeed; // how fast the scrollbar is moving towards its target position, higher means slower
@@ -75,11 +78,6 @@ public class UIController : MonoBehaviour {
                 UpdatePlanetDataInputFields(buffer);
             }
 
-            // update text fields
-            textMagnitudeVelocity.text = ((float)buffer.velocity.magnitude).ToString() + " m/s";
-            textMagnitudeAcceleration.text = ((float)buffer.acceleration.magnitude).ToString() + " m/s²";
-            textMagnitudeForce.text = ((float)buffer.force.magnitude).ToString() + " N";
-
         }
 
         if(Input.GetKey(KeyCode.Delete)) {
@@ -89,7 +87,7 @@ public class UIController : MonoBehaviour {
         }
 
         if(Input.mousePosition.x > screenWidth - 340) {
-            infoscreenScrollDelta = infoscreenScrollDelta + Input.mouseScrollDelta.y  * infoscreenScrollDistancePerStep; // increase infoscreenScrollDelta when scrolling
+            infoscreenScrollDelta = infoscreenScrollDelta + Input.mouseScrollDelta.y * infoscreenScrollDistancePerStep; // increase infoscreenScrollDelta when scrolling
         }
         if(infoscreenScrollDelta < 0.000001f && infoscreenScrollDelta > -0.000001f) { // set infoscreenScrollDelta to 0 if the value is too close to 0
             infoscreenScrollDelta = 0;
@@ -116,6 +114,22 @@ public class UIController : MonoBehaviour {
         inputFieldMass.text = ((float)planet.mass).ToString();
         inputFieldDiameter.text = ((float)planet.diameter).ToString();
 
+        textMagnitudeVelocity.text = ((float)planet.velocity.magnitude).ToString() + " m/s";
+        textMagnitudeAcceleration.text = ((float)planet.acceleration.magnitude).ToString() + " m/s²";
+        textMagnitudeForce.text = ((float)planet.force.magnitude).ToString() + " N";
+
+        if(planet.type == 'r') {
+            inputFieldBurnRate.text = planet.burnRate.ToString();
+            inputFieldThrust.text = ((float)planet.thrust).ToString();
+            toggleIsRocket.isOn = true;
+            planet.type = 'r';
+        } else {
+            inputFieldBurnRate.text = "";
+            inputFieldThrust.text = "";
+            toggleIsRocket.isOn = false;
+            planet.type = 'p';
+        }
+
     }
 
     public void SetSelected(GameObject Planet) { // set Planet as the new selected planet
@@ -139,6 +153,11 @@ public class UIController : MonoBehaviour {
 
             inputFieldMass.text = "";
             inputFieldDiameter.text = "";
+
+            toggleIsRocket.isOn = false;
+
+            inputFieldBurnRate.text = "";
+            inputFieldThrust.text = "";
 
         } else {
             UpdatePlanetDataInputFields(selected.GetComponent<Planet>());
@@ -206,7 +225,7 @@ public class UIController : MonoBehaviour {
 
     public void SliderScrollbarUpdate() {
 
-                infoscreen.position = new Vector3(infoscreen.position.x, sliderScrollbar.value, 0);
+        infoscreen.localPosition = new Vector3(infoscreen.localPosition.x, sliderScrollbar.value, 0);
 
         //infoscreen.position = new Vector3(infoscreen.position.x, sliderScrollbar.value * -mainCamera.GetComponent<Camera>().ScreenToWorldPoint(new Vector3(0, infoscreenHeight - screenHeight, 0)).y, 0);
 
@@ -295,6 +314,29 @@ public class UIController : MonoBehaviour {
             SpriteCenterOfMass.SetActive(false);
         } else {
             SpriteCenterOfMass.SetActive(true);
+        }
+    }
+
+    public void ToggleSelectedIsRocket() {
+        if(planetSystem.timeScale == 0 && selected != null) {
+            if(selected.GetComponent<Planet>().type == 'p') {
+                selected.GetComponent<Planet>().type = 'r';
+            } else {
+                selected.GetComponent<Planet>().type = 'p';
+            }
+            UpdatePlanetDataInputFields(selected.GetComponent<Planet>());
+        }
+    }
+
+    public void InputFieldBurnRateUpdate() {
+        if(planetSystem.timeScale == 0 && selected != null && inputFieldBurnRate.text != "") {
+            selected.GetComponent<Planet>().burnRate = float.Parse(inputFieldBurnRate.text);
+        }
+    }
+
+    public void InputFieldThrustUpdate() {
+        if(planetSystem.timeScale == 0 && selected != null && inputFieldThrust.text != "") {
+            selected.GetComponent<Planet>().thrust = double.Parse(inputFieldThrust.text);
         }
     }
 

@@ -41,11 +41,12 @@ public class PlanetSystem : MonoBehaviour {
             for(int t = 0; t < timeScale; t++) {
 
                 for(int i = 0; i < gameObject.transform.childCount; i++) { // calculate new positions for each planet
-                    gameObject.transform.GetChild(i).GetComponent<Planet>().CalculateNextPosition(1 / accuracy);
+
+                        gameObject.transform.GetChild(i).GetComponent<Planet>().CalculateNextPosition(1 / accuracy);
                 }
 
                 for(int i = 0; i < gameObject.transform.childCount; i++) { // update positions of each planet
-                    gameObject.transform.GetChild(i).GetComponent<Planet>().EnforceNextPosition();
+                        gameObject.transform.GetChild(i).GetComponent<Planet>().EnforceNextPosition();
                 }
 
             }
