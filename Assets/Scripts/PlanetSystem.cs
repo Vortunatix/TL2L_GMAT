@@ -36,7 +36,7 @@ public class PlanetSystem : MonoBehaviour {
 
         if(timeScale > 0) { // if time is not paused
 
-            timePassed = timePassed + timeScale  * accuracy; // update time within simulation
+            timePassed = timePassed + timeScale  * (1/accuracy); // update time within simulation
 
             for(int t = 0; t < timeScale; t++) {
 
