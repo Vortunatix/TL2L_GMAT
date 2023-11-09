@@ -75,17 +75,17 @@ public class UIController : MonoBehaviour {
             
             Planet buffer = selected.GetComponent<Planet>();
 
-            if(planetSystem.timeScale != 0) {
+            if(planetSystem.timeScale != 0) { // if time is running
                 UpdatePlanetDataInputFields(buffer);
             }
 
         }
 
-        if(Input.GetKey(KeyCode.Delete)) {
+        /*if(Input.GetKey(KeyCode.Delete)) {
 
             DeleteSelectedPlanet();
 
-        }
+        }*/
 
         if(Input.mousePosition.x > screenWidth - 340) {
             infoscreenScrollDelta = infoscreenScrollDelta + Input.mouseScrollDelta.y * infoscreenScrollDistancePerStep; // increase infoscreenScrollDelta when scrolling
@@ -123,13 +123,13 @@ public class UIController : MonoBehaviour {
         if(planet.type == 'r') {
             inputFieldBurnRate.text = planet.burnRate.ToString();
             inputFieldThrust.text = ((float)planet.thrust).ToString();
-            toggleIsRocket.isOn = true;
-            planet.type = 'r';
+            if(toggleIsRocket.isOn == false) {
+                toggleIsRocket.isOn = true;
+                ToggleSelectedIsRocket();
+            }
         } else {
             inputFieldBurnRate.text = "";
             inputFieldThrust.text = "";
-            toggleIsRocket.isOn = false;
-            planet.type = 'p';
         }
 
     }
@@ -321,6 +321,7 @@ public class UIController : MonoBehaviour {
     }
 
     public void ToggleSelectedIsRocket() {
+        Debug.Log("toggle triggered");
         if(planetSystem.timeScale == 0 && selected != null) {
             if(selected.GetComponent<Planet>().type == 'p') {
                 selected.GetComponent<Planet>().type = 'r';
@@ -328,7 +329,9 @@ public class UIController : MonoBehaviour {
                 selected.GetComponent<Planet>().type = 'p';
             }
             UpdatePlanetDataInputFields(selected.GetComponent<Planet>());
-        }
+        } /*else if(selected == null) {
+            toggleIsRocket.isOn = false;
+        }*/
     }
 
     public void InputFieldBurnRateUpdate() {
